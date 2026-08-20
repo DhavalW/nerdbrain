@@ -1,6 +1,6 @@
 ---
 name: refresh-nerdbrain
-description: Rebuild this repo's derived content after files change — page maps for new, replaced or deleted doc snapshots, router rows and inventory lines for new packs, the /nerdbrain platform trigger list, and the doc index tables. Use when the user types /refresh-nerdbrain, or asks to refresh, resync, reindex or rebuild the nerdbrain repo after dropping in a snapshot, adding or renaming a pack, or removing either. For work inside the nerdbrain repo itself — never run it against a project that merely has nerdbrain attached as a reference.
+description: Rebuild this repo's derived content after files change — page maps for new, replaced or deleted doc snapshots, router rows and inventory lines for new packs, the /nerdbrain trigger list, and the doc index tables. Use when the user types /refresh-nerdbrain, or asks to refresh, resync, reindex or rebuild the nerdbrain repo after dropping in a snapshot, adding or renaming a pack, or removing either. For work inside the nerdbrain repo itself — never run it against a project that merely has nerdbrain attached as a reference.
 ---
 
 # refresh-nerdbrain

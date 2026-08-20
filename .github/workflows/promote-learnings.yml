@@ -91,7 +91,7 @@ jobs:
                because a week looks quiet.
 
             3. FOR EACH ENTRY YOU TAKE, make the pack edit by following
-               skill/update-instructions-in-nerdbrain-repo/SKILL.md exactly:
+               skill/update-nerdbrain/SKILL.md exactly:
                placement, house style (instructions/copy.md and
                instructions/anti-ai-tells.md), and the derived-content rebuild.
                One commit per observation, so the user can drop them individually.

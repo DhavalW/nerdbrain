@@ -1,6 +1,6 @@
 # BaaS + thick client
 
-A rich client app in the browser; a backend-as-a-service (PocketBase-shaped) provides
+A rich client app in the browser; a backend-as-a-service provides
 auth, data, files, and realtime. No custom server code, or almost none.
 
 ## Shape
@@ -22,7 +22,8 @@ its SDK, cached client-side, subscribed to for realtime.
 every read and write is authorized per-request by rules (ownership, role, field
 protection). Server-side hooks exist only for what rules can't express: side effects,
 cross-record invariants, third-party calls. Client-side checks are UX, never security
-(`../security.md`, and the rules discipline in `../platforms/pocketbase.md`).
+(`../security.md`, plus whatever the platform's own pack says about how its rules
+evaluate).
 
 ## Fits when / avoid when
 
@@ -36,7 +37,7 @@ cross-record invariants, third-party calls. Client-side checks are UX, never sec
 
 Flat: one BaaS instance serves the app; client-side compute costs nothing as users grow.
 First limits to bite: instance disk (keep large files in object storage) and, on free
-hosting, instance sleep / cold starts (`../platforms/pockethost.md`).
+hosting, instance sleep and cold starts on a free tier.
 
 ## Best practices
 
@@ -52,6 +53,5 @@ hosting, instance sleep / cold starts (`../platforms/pockethost.md`).
 
 ## Compatible stacks
 
-`../stacks/default-free-tier.md` (the canonical pairing), `../stacks/alpine-prototype.md`
-for the quick version. Clashes with `../stacks/workers-api.md` — that stack exists for
-when there is no BaaS.
+Any stack in `../stacks/` pairing a thin frontend with a managed BaaS. Clashes with a
+stack built around your own API service — that shape exists for when there is no BaaS.

@@ -70,7 +70,7 @@ flowchart LR
     R -->|"auth, payments,<br/>uploads, secrets"| SEC["security.md"]
     R -->|"any user-visible text"| CP["copy.md"]
     R -->|"a screen a user sees"| UX["ux-user.md"]
-    R -->|"PocketBase in play"| PB["platforms/pocketbase.md"]
+    R -->|"a platform in play"| PB["platforms/&lt;that one&gt;.md"]
     R -.->|"not matched:<br/>stays out of context"| X["the other 30 packs"]
 
     style X stroke-dasharray: 4 4
@@ -319,16 +319,11 @@ that always load together cost more than the one file did.
 
 ## Where the boundaries are
 
-Three of them, each load-bearing:
+Two of them, both load-bearing:
 
 **Packs govern the software being built, not the session building it.** When a pack says
 "the user" it means whoever ends up using what is being made. So a rule about untrusted
 input is never a reason to refuse an instruction from the person you're working with.
-
-**`proposals/` governs nothing.** Designs thought through and deliberately not built. Not
-routed, not draft rules, not read to decide how to work — and the gate enforces the line in
-both directions, because a pack citing a proposal is the first step in a proposal quietly
-becoming a rule.
 
 **Nothing sensitive, anywhere.** No keys, tokens, connection strings, private hostnames,
 customer data. Not in a pack, an example, a commit message, or a file that gets cleaned up

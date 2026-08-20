@@ -45,7 +45,7 @@ cat <<EOF
     repo     $REPO
 
   Load your packs in any project:   /nerdbrain
-  Add a rule to the packs:          /update-instructions-in-nerdbrain-repo <rule>
+  Add a rule to the packs:          /update-nerdbrain <rule>
   Rebuild this repo after changes:  /refresh-nerdbrain
   Pin the repo location:            export NERDBRAIN_HOME="$REPO"
 

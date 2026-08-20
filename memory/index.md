@@ -86,7 +86,7 @@ rides in that same PR, so the ledger and the proposal are never out of step.
 **shipped** → approved and written into a pack. From the weekly run that means the PR was
 merged — **merging is the yes**, per item: drop the commits you don't want and merge the
 rest. From a session it means the user said yes in conversation and
-`/update-instructions-in-nerdbrain-repo` wrote it.
+`/update-nerdbrain` wrote it.
 
 **declined** → refused. The weekly run reconciles its own closed PRs before drafting
 anything new, so a no is recorded once and never re-proposed; a no given in conversation

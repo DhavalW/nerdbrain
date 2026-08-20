@@ -46,6 +46,6 @@ users. No limit bites.
 
 ## Compatible stacks
 
-`../stacks/astro-content.md` (tool embedded in a content site) or the frontend half of any
-stack with the backend deleted. Alpine for simple tools; React/Preact/Svelte when state
-gets real (`../stacks/`).
+A static-site stack with the tool embedded in it, or the frontend half of any stack with
+the backend deleted. A no-build library for simple tools; a real framework when state gets
+real (`../stacks/`).

@@ -39,5 +39,5 @@ or anything used monthly by novices.
 
 ## Pairs with
 
-`../architectures/baas-client.md` apps on `../stacks/default-free-tier.md`; keyboard
+`../architectures/baas-client.md` apps and operator tools generally; keyboard
 shortcuts and bulk actions are part of the theme, not extras.

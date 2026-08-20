@@ -47,9 +47,6 @@ Secrets are never recorded, in any form, anywhere in this repo.
 Anything you actually want decided is asked in the nerdbrain approvals block, in the fixed
 layout `instructions/profile.md` sets out. Naming an item's id is the yes; silence is not.
 
-`proposals/` holds parked designs and **governs nothing** — not routed, not draft rules, not
-read to decide how to work. Open one only when the user names that work.
-
 A rule that would hold for anyone can go back to the public repo this one was forked from.
 **Offer it and wait** — never open an upstream PR unasked. The version that leaves names no
 project, client or internal service, and carries the rule without the evidence that proved

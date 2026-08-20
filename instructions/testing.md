@@ -51,9 +51,9 @@ The suite is where `security.md` becomes enforceable. Encode the invariants that
 never regress:
 
 - **Authorization:** every protected resource has a test calling it as an anonymous user
-  and as a *different* authenticated user, asserting denial. For PocketBase, exercise the
-  real API against the rules (`platforms/pocketbase.md`) — reading the rule expression is
-  not a test.
+  and as a *different* authenticated user, asserting denial. Where authorization lives in
+  a platform's declarative rules rather than your code, exercise the real API against
+  them — reading the rule expression is not a test.
 - **Privileged fields:** a crafted request setting `role`, `plan`, `credits`, `owner`
   gets rejected — proven, not assumed.
 - **Quotas and money:** exceeding a limit blocks; a forged price or webhook without a valid
@@ -73,8 +73,9 @@ of decision the checkpoint protocol exists for.
 - One behavior per test, named as a sentence: `rejects expired codes at redemption`.
 - Shared setup in fixtures/factories with safe defaults; each test states only what it
   cares about.
-- Integration tests run against a real local instance (PocketBase runs fine locally —
-  `platforms/pockethost.md`), never against production.
+- Integration tests run against a real local instance of whatever the app persists to,
+  never against production. If the platform can't run locally, that is a fact worth knowing
+  before you choose it.
 - The whole suite runs in CI on every push and fails the build on any failure
   (`shipping.md`). A suite that can be skipped will be.
 

@@ -106,7 +106,7 @@ closes with or without the automation.**
 - **Set `Last raised` to today on each one you raise**, answered or not. Without it the same
   three come back tomorrow, and being nagged by your own instructions repo is how people
   stop reading it.
-- **A yes goes through `/update-instructions-in-nerdbrain-repo`** and the entry becomes
+- **A yes goes through `/update-nerdbrain`** and the entry becomes
   `shipped`. A no is written straight to the entry as `declined` — a refusal is worth
   recording precisely because it stops the question being asked a third time.
 - **Nothing at all is a fine outcome.** No ripe entries means say nothing; don't manufacture
@@ -123,7 +123,7 @@ closes with or without the automation.**
   Ask in the approvals block, in writing, and let the turn end — the batch keeps.
 - Whatever the channel, promotion is where the rule gets its trigger, its enforcement and
   its provenance id — `meta-rules.md` has the bar it has to clear.
-- Approved in conversation goes through `/update-instructions-in-nerdbrain-repo`, which
+- Approved in conversation goes through `/update-nerdbrain`, which
   handles placement, house style, the router and inventory rebuild, the gate, and the
   commit — and flips the ledger entry to `shipped` in the same change.
 - Declined is recorded, not forgotten: the entry stays at `declined` so nothing re-proposes

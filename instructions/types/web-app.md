@@ -2,9 +2,10 @@
 
 Load when: interactive app, dashboard, SPA, PWA — anything with real client state.
 
-Default: **Alpine.js** for light interactivity, **React/Preact or Svelte** when state is
-genuinely complex, **PocketBase** behind it, **Cloudflare Pages** in front.
-See `../stack-and-architecture.md` before committing.
+Default shape: a **no-build library** for light interactivity, a **real framework** when
+state is genuinely complex, a **managed backend** behind it, a **CDN host** in front. Pick
+the specific tools at the checkpoint — see `../stack-and-architecture.md` before
+committing.
 
 Also load: `../ux-user.md`, `../engineering.md`, `../security.md`.
 
@@ -41,7 +42,8 @@ Rules:
 - Deduplicate concurrent identical requests.
 - Cancel requests when the component that wanted them unmounts.
 - Paginate or virtualize anything unbounded.
-- Realtime (PocketBase subscriptions) beats polling on both freshness and cost.
+- Realtime subscriptions beat polling on both freshness and cost, where the backend has
+  them.
 
 ## Offline and flaky networks
 

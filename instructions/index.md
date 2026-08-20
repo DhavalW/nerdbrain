@@ -69,7 +69,7 @@ a chosen template carries project-level precedence.
 | Menu | Holds | Skim when |
 |---|---|---|
 | `architectures/` | Where code, data, and trust live | Any new app or major feature |
-| `stacks/` | Tool combinations that shipped together | Any new app; `stacks/default-free-tier.md` is the standing recommendation |
+| `stacks/` | Tool combinations that shipped together | Any new app |
 | `themes/` | Visual positions with systems attached | Anything with a user-facing surface |
 
 Each menu folder carries a capture file (e.g. `stacks/_template.md`) — the format for
@@ -77,26 +77,13 @@ adding a pattern proven in a shipped app.
 
 ### Platform packs
 
-Load when the platform is in play. These ship as worked examples of the form, not as a
-statement about what you should use — keep the ones you need, delete the rest, and write
-your own from `platforms/_template.md`. **No captures are bundled**, so each pack names the
-source to capture and says to verify against the live docs until you do.
+Load when the platform is in play. **The folder ships empty** — one pack per platform you
+actually build on, written from `platforms/_template.md` as you go. A pack is worth writing
+the second time you look something up: it names the gotchas, points at the capture in
+`../docs/`, and marks the claims that decay so they get re-verified instead of quoted.
 
 | Platform | Load |
 |---|---|
-| PocketBase (collections, API rules, client SDK) | `platforms/pocketbase.md` |
-| PocketBase hooks, migrations, production operations | `platforms/pocketbase-server.md` |
-| PocketHost (hosting the PocketBase instance) | `platforms/pockethost.md` |
-| Cloudflare Pages/Workers/KV/R2/D1, deploys | `platforms/cloudflare.md` |
-| AppSumo lifetime deal, listing, reviews, LTD architecture | `platforms/appsumo.md` |
-| AppSumo code redemption, license tiers, stacking, webhooks/OAuth | `platforms/appsumo-licensing.md` |
-| Gumroad checkout, license keys, Ping webhooks | `platforms/gumroad.md` |
-| Gumroad fees, chargebacks, payouts, localized pricing | `platforms/gumroad-commercial.md` |
-| Emailit (transactional email, email verification, webhooks) | `platforms/emailit.md` |
-| Reoon Email Verifier (address verification before you send) | `platforms/reoon.md` |
-| Keywords Everywhere API (keyword/SEO data) | `platforms/keywords-everywhere.md` |
-| BrowserAct — whether to use a cloud browser, and the credit cost | `platforms/browseract.md` |
-| BrowserAct workflows: nodes, credentials, REST, MCP, callbacks | `platforms/browseract-workflows.md` |
 | A platform with no pack yet | `platforms/_template.md` (write one) |
 
 ## Precedence
@@ -158,35 +145,19 @@ types/browser-extension.md
 types/static-site.md
 types/web-app.md
 architectures/client-only.md          everything in the browser, no backend
-architectures/baas-client.md          thick client + PocketBase-shaped BaaS
+architectures/baas-client.md          thick client + a managed backend-as-a-service
 architectures/static-plus-functions.md  static site + a few edge functions
 architectures/local-first-sync.md     device-primary data, background sync
 architectures/_template.md            capture format for proven architectures
-stacks/default-free-tier.md           PocketBase/PocketHost + Cloudflare + frontend by need
-stacks/astro-content.md               Astro + Pages for content-shaped sites
-stacks/alpine-prototype.md            no-build Alpine, fastest honest prototype
-stacks/workers-api.md                 Workers + KV/R2/D1 services, no UI
-stacks/_template.md                   capture format for proven stacks
+stacks/_template.md                   capture format for proven stacks; the menu fills
+                                      as you capture the ones that shipped
 themes/minimal-editorial.md           typography carries everything
 themes/dense-utilitarian.md           density is respect; instrument feel
 themes/warm-approachable.md           warmth via material, for non-experts
 themes/bold-editorial.md              scale contrast as the statement
 themes/_template.md                   capture format for proven themes
-platforms/pocketbase.md
-platforms/pocketbase-server.md
-platforms/pockethost.md
-platforms/cloudflare.md
-platforms/appsumo.md
-platforms/appsumo-licensing.md
-platforms/gumroad.md
-platforms/gumroad-commercial.md
-platforms/emailit.md
-platforms/keywords-everywhere.md
-platforms/reoon.md
-platforms/browseract.md
-platforms/browseract-workflows.md
-platforms/_template.md
-../docs/index.md            router to the per-platform vendor doc indexes
+platforms/_template.md                write one per platform you build on
+../docs/index.md            router to the per-source doc indexes
 ../docs/wanted.md           docs a session needed and this repo didn't have
 ../memory/index.md          the ledger: entry format, lifecycle, what may be written
 ```

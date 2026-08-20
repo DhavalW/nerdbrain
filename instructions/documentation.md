@@ -33,7 +33,7 @@ Every doc starts with two lines of front matter:
 
 ```
 Updated: 2026-08-09
-Covers: how records sync between the client cache and PocketBase
+Covers: how records sync between the client cache and the server
 ```
 
 ## Diagrams

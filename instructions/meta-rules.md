@@ -12,7 +12,8 @@ by default.
 Every rule promoted into a pack carries these, in the rule or in the section around it:
 
 - **Fires when** — the situation, not the topic. "A collection where every record has one
-  owner" beats "PocketBase rules". A rule whose trigger is a topic gets loaded and then
+  owner" beats naming one vendor's rule syntax. A rule whose trigger is a topic gets loaded
+  and then
   ignored, because nothing in the work ever matches it.
 - **Enforced by** — one of `gate`, `review question`, or `advisory`, said out loud. A rule
   with no enforcement is a wish, and wishes are why long instruction files stop being

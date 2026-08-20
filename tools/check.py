@@ -29,9 +29,6 @@ Enforces the invariants that keep the pack system reliable as it grows:
      reads this file, so a malformed entry is a silently skipped observation.
  13. A `## Volatile claims` section marks every claim with a verify-by month,
      which is what makes tools/staleness.py able to report it.
- 14. Parked work under proposals/ carries its not-a-rule banner, and no
-     instruction pack references that folder - the two directions a proposal
-     could quietly turn into a rule.
 
 What this deliberately does NOT check is whether any of it is still TRUE - a
 page map that drifted from the document, an inventory line that stopped
@@ -377,40 +374,6 @@ def check_ledger_entries(errors):
                 )
 
 
-PROPOSALS = "proposals"
-NOT_INSTRUCTIONS = "Not instructions. Nothing in this folder governs anything."
-
-
-def check_proposals_are_not_instructions(errors):
-    """The parked-work folder can never be mistaken for a source of rules.
-
-    Two directions, because one alone leaks. Every file there carries the
-    banner, so a reader who arrives mid-file still learns it governs nothing.
-    And no instruction pack may reference the folder at all - a pack citing a
-    proposal is the first step in a proposal quietly becoming a rule, and it is
-    the step nobody would notice.
-
-    Deliberately not a judgement call: 'is this file written like a rule' is
-    unenforceable, but 'is it marked, and is it cited' is exact.
-    """
-    folder = os.path.join(ROOT, PROPOSALS)
-    if os.path.isdir(folder):
-        for path in sorted(glob.glob(os.path.join(folder, "**", "*.md"), recursive=True)):
-            head = "".join(open(path, encoding="utf-8").readlines()[:6])
-            if NOT_INSTRUCTIONS not in head:
-                errors.append(
-                    f"{rel(path)}: missing the parked-work banner in its first lines - "
-                    f"add '> **{NOT_INSTRUCTIONS}**' so it cannot be read as a rule"
-                )
-    for path in glob.glob(os.path.join(ROOT, "instructions", "**", "*.md"), recursive=True):
-        for n, line in enumerate(open(path, encoding="utf-8"), 1):
-            if f"{PROPOSALS}/" in line:
-                errors.append(
-                    f"{rel(path)}:{n}: an instruction pack references {PROPOSALS}/ - "
-                    f"parked work is not a rule and a pack must not cite one"
-                )
-
-
 VOLATILE_HEADING = re.compile(r"^## Volatile claims\s*$", re.M)
 VERIFY_BY = re.compile(r"verify by 20\d\d-(?:0[1-9]|1[0-2])\b")
 
@@ -496,10 +459,11 @@ BUDGETS = {
     # 290 -> 295 for the two rows telling a session to rebuild MECHANICS.md and
     # CONTRIBUTING.md. Both are derived from behavior and read by people who
     # never open a pack, so a change that leaves them stale ships a lie to
-    # exactly the audience that cannot check it.
-    "CLAUDE.md": 295,
-    "docs/index.md": 100,           # the vendor router; keep it a router
-    "instructions/index.md": 195,   # the pack inventory; grows with the packs
+    # exactly the audience that cannot check it. 295 -> 293 when the parked-work
+    # folder was dropped and its paragraph went with it.
+    "CLAUDE.md": 293,
+    "docs/index.md": 95,            # the doc router; keep it a router
+    "instructions/index.md": 170,   # the pack inventory; grows with the packs
     # The one always-loaded file that is SUPPOSED to grow, because it grows by
     # learning something and shortens the checkpoint in exchange. 100 -> 165 when
     # it took on the base writing method and both nerdbrain blocks. The approvals
@@ -520,19 +484,14 @@ BUDGETS = {
     # It stays whole because there is no honest seam: capture, the backlog
     # sweep and the approval gate all fire at exactly one moment - a task
     # finishing - so any two halves would always load together.
-    "instructions/learning.md": 155,
-    "memory/index.md": 118,
-    "instructions/platforms/appsumo.md": 133,
-    "instructions/platforms/browseract.md": 125,
-    "instructions/platforms/gumroad.md": 110,
-    "instructions/platforms/pocketbase.md": 132,
-    "instructions/reversibility.md": 115,
+    "instructions/learning.md": 152,
+    "memory/index.md": 115,
+    "instructions/reversibility.md": 80,
     "instructions/stack-and-architecture.md": 125,  # 122 -> 125, card-on-file axis
     # 100 -> 113 for the dashboard-deploy rule and R2's card gate. The pack sat
     # at 99, so neither could land without cutting an approved rule - the trade
     # profile.md says not to make. No honest seam either: deploys, storage
     # primitives and caching all fire on "Cloudflare is in play".
-    "instructions/platforms/cloudflare.md": 113,
     # 100 -> 128 for how a PocketHost deploy actually behaves: migrations apply
     # on the instance's next start rather than on upload, there is no remote
     # rollback because SFTP has no shell, and Admin Sync makes the account
@@ -540,8 +499,7 @@ BUDGETS = {
     # once. Splitting the deploy half out was refused deliberately - the whole
     # point is that these are in context whenever PocketHost is referenced, so
     # both halves would always load together and cost more than one file.
-    "instructions/platforms/pockethost.md": 128,
-    "instructions/testing.md": 113,
+    "instructions/testing.md": 95,
     # 100 -> 115 for "The config file". The pack was exactly at the ceiling, so
     # the rule could not land without either cutting an approved one or raising
     # this. Splitting was weighed and refused: the new section is 14 lines, and
@@ -557,13 +515,14 @@ BUDGETS = {
 # capped - so splitting a big always-on file into three smaller ones cannot
 # clear the per-file budgets while costing a reader exactly as much as before.
 #
-# The total is the sum of the members' own budgets above: 295 + 195 + 165 + 175.
+# The total is the sum of the members' own budgets above: 293 + 170 + 165 + 175.
 # Every member now has an entry, profile.md included - it earned one when it took
 # on the writing method and the nerdbrain block, both of which have to apply to
 # every reply and so cannot live in an on-demand pack.
 #
-# 689 -> 787 as those landed. 787 -> 830 for the upstream-contribution rule, the
-# outward-facing docs rows, and the profile's fill-in scaffolding. The profile is still the member that is SUPPOSED to
+# 689 -> 787 as those landed, then 787 -> 803: up for the upstream-contribution rule
+# and the profile's fill-in scaffolding, down further when the platform table left the
+# router. The ratchet works in both directions and this is the direction to prefer. The profile is still the member that is SUPPOSED to
 # grow, because it grows by learning something and pays for itself by shortening
 # the checkpoint - a profile that answers three standard questions has already
 # earned its lines back.
@@ -576,7 +535,7 @@ BUDGETS = {
 # which is a change to when its rules apply, and belongs at a checkpoint.
 ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
                  "instructions/profile.md")
-ALWAYS_LOADED_BUDGET = 830
+ALWAYS_LOADED_BUDGET = 803
 
 
 def check_always_loaded_total(errors):
@@ -687,7 +646,7 @@ def main():
                   check_capture_folders_are_routed, check_line_budgets,
                   check_always_loaded_total, check_wrap_width,
                   check_ledger_entries,
-                  check_proposals_are_not_instructions, check_volatile_claims):
+                  check_volatile_claims):
         check(errors)
     if errors:
         print(f"FAIL - {len(errors)} violation(s). Each message names its fix; "
@@ -698,8 +657,7 @@ def main():
     print("ok - references resolve, no dated names or page cites outside the "
           "indexes, packs and snapshots indexed both directions, every capture "
           "folder routed, skill triggers cover all platforms, files inside "
-          "their line budgets, ledger entries parse, parked work is marked "
-          "and uncited, volatile claims dated")
+          "their line budgets, ledger entries parse, volatile claims dated")
     return 0
 
 

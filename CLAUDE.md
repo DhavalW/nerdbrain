@@ -73,11 +73,6 @@ credential configured, which is the default state of a fresh clone.
 Docs the task needed and this repo didn't have go in `docs/wanted.md`, same terms: no
 approval, because it's a worklist and not a rule.
 
-`proposals/` is the opposite corner: designs that were thought through and deliberately not
-built. **Nothing there governs anything** — it is not routed, not a draft rule, and not
-loaded to decide how to work. Read one only when the user asks for that work by name. The
-gate holds the line in both directions (`proposals/index.md`).
-
 ## Sharing a learning upstream
 
 This repo is a fork of a public one, and the loop runs in both directions. A rule the user
@@ -104,12 +99,16 @@ rests on, and the gate green. `CONTRIBUTING.md` has the full shape.
 
 ## Working on this repo
 
-`/update-instructions-in-nerdbrain-repo <rule>` — named at full length so it can't be mistaken
-for a request to edit some other project's instructions — is the shorthand for the most
-common change here: the user states a rule in a line, and the skill places it, writes it in
-house style, rebuilds the router and inventory, and runs the gate. It ships in this repo
-(`.claude/skills/update-instructions-in-nerdbrain-repo`) and everything below still governs;
-the skill just saves the user from restating it every time.
+`/update-nerdbrain <rule>` is the shorthand for the most common change here: the user
+states a rule in a line, and the skill places it, writes it in house style, rebuilds the
+router and inventory, and runs the gate. It ships in this repo
+(`.claude/skills/update-nerdbrain`) and everything below still governs; the skill just
+saves the user from restating it every time.
+
+**It edits this repo and nothing else.** The name is short, so the guard is not in the name:
+a rule that governs only the project you happen to be working in belongs in that project's
+own `CLAUDE.md`, and this skill never touches it. When the ask could be read either way, say
+which one you think it is and wait.
 
 This repo *is* the instruction system, so changes here follow its own rules. The packs in
 `instructions/` apply to work on this repo too — especially `instructions/copy.md` and

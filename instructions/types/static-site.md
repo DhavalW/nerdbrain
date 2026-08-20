@@ -2,8 +2,9 @@
 
 Load when: marketing site, blog, docs site, portfolio, landing page.
 
-Default stack: **Astro on Cloudflare Pages.** Content in Markdown/MDX with a typed schema.
-Zero JS shipped unless a component genuinely needs it.
+Default shape: **a content-oriented static generator on a CDN host with git deploys.**
+Content in Markdown with a typed schema. Zero JS shipped unless a component genuinely needs
+it. Pick the specific tools at the checkpoint (`../stack-and-architecture.md`).
 
 Also load: `../optimization.md` (SEO section), `../copy.md`, `../design.md`.
 

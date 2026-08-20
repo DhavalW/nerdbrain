@@ -38,7 +38,7 @@ is a backend wearing a costume.
 
 Static requests effectively free; functions and storage metered per use. First limits to
 bite: function invocations/day, then KV writes/day — reads and storage rarely matter
-(`../platforms/cloudflare.md`). Cache function responses aggressively; a cache hit skips
+as your host defines them. Cache function responses aggressively; a cache hit skips
 the meter.
 
 ## Best practices
@@ -54,6 +54,6 @@ the meter.
 
 ## Compatible stacks
 
-`../stacks/astro-content.md` (the natural pairing) and `../stacks/workers-api.md` when the
-functions side grows into a small service. Composes with `client-only.md` — a client-only
-tool often gains its first function here.
+Any content-oriented static stack is the natural pairing; a dedicated API stack takes over
+when the functions side grows into a small service. Composes with `client-only.md` — a
+client-only tool often gains its first function here.

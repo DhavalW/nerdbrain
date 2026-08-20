@@ -50,7 +50,6 @@ Only relevant for public content — skip for apps behind a login.
 - Fast, mobile-first, accessible — these are ranking inputs, not separate work.
 - Content depth beats keyword density. Answer the question the search was asking.
 
-For keyword and volume data, see `platforms/keywords-everywhere.md`.
 
 ## Accessibility
 

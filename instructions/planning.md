@@ -30,8 +30,8 @@ question standing on its own:
 ```
 Q3. Where do uploaded images live?
     Why it matters: instance disk is capped; the wrong choice means a migration later.
-    A. R2 bucket, references in PocketBase — free egress, survives moves  ← recommended
-    B. PocketBase file fields — simpler, but shares the capped instance disk
+    A. Object storage, references in the database — survives a move  ← recommended
+    B. Database file fields — simpler, but shares the capped instance disk
 ```
 
 Rules:
@@ -60,9 +60,9 @@ Rules:
   while they're already deciding, never as its own interruption an hour later.
 
 Bad: "What database do you want?"
-Good: "PocketBase gives you auth + admin UI free but one instance is a single point of
-failure. D1 scales flatter but you'd build auth. Recommend PocketBase — you need admin
-tooling more than you need scale. OK?"
+Good: "The managed option gives you auth and an admin UI free, but one instance is a single
+point of failure. The serverless one scales flatter and you'd build auth yourself.
+Recommend the managed one — you need admin tooling more than you need scale. OK?"
 
 ## The plan itself
 

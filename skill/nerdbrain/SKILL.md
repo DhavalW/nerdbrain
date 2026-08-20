@@ -1,6 +1,6 @@
 ---
 name: nerdbrain
-description: Load your nerdbrain instruction packs, vendor doc index, and architecture/stack/theme template menus from the nerdbrain repo, then apply the router rules to the current task. Use when the user types /nerdbrain, or asks to load their instructions, standards, preferences, house rules, templates, or platform docs (PocketBase, PocketBase server, PocketHost, Cloudflare, AppSumo, AppSumo licensing, Gumroad, Gumroad commercial, BrowserAct workflows, Emailit, Reoon, Keywords Everywhere, BrowserAct). Also use at the start of a new project or feature to present the template menus and pick up the ask-before-building rules, and before starting a task in any session where the nerdbrain repo is attached as a reference alongside another repo — route the task through the packs before working on it.
+description: Load your nerdbrain instruction packs, doc index, and architecture/stack/theme template menus from the nerdbrain repo, then apply the router rules to the current task. Use when the user types /nerdbrain, or asks to load their instructions, standards, preferences, house rules, templates, or the docs for a platform they have a pack for. Also use at the start of a new project or feature to present the template menus and pick up the ask-before-building rules, and before starting a task in any session where the nerdbrain repo is attached as a reference alongside another repo — route the task through the packs before working on it.
 ---
 
 # nerdbrain

@@ -55,6 +55,6 @@ time — which is much of the appeal (`../stack-and-architecture.md`).
 
 ## Compatible stacks
 
-`../stacks/default-free-tier.md` with PocketBase as the sync target (its realtime
-subscriptions make decent change feeds). Frontend needs real state discipline —
-React/Preact/Svelte over Alpine here.
+Any stack whose backend can serve a change feed — realtime subscriptions or a polled
+delta endpoint — as the sync target. The frontend needs real state discipline, so a
+framework over a no-build library here.

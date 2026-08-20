@@ -8,8 +8,8 @@ client or server", "will this scale", "what will this cost".
 Architectures (where code, data, and trust live) are templates in `architectures/`;
 stacks (the tools that fill the shape) in `stacks/`; visual positions in `themes/`. They
 are chosen per project at the decision checkpoint, per `core.md` — relevant options
-presented with tradeoffs, custom always available, `stacks/default-free-tier.md` the
-standing recommendation until the project's shape argues otherwise.
+presented with tradeoffs, and custom always available. A menu with nothing in it yet means
+propose from first principles and capture what shipped.
 
 This pack carries what stays true across all of them: the client-first bias, the
 free-tier discipline, and how to present the decision.
@@ -79,12 +79,12 @@ Assume budget is zero until told otherwise.
 an architecture doc are worse than none. Check the vendor's pricing page at decision time
 (see `research.md`). Rough shape as of writing, to know what to look up:
 
-- Cloudflare Pages: static requests effectively unmetered, monthly build cap
-- Cloudflare Workers: daily request cap, CPU-ms per invocation cap
-- Cloudflare KV: reads generous, **writes are the tight one**
-- Cloudflare R2: no egress fee (why it beats S3), storage + ops allowance — **wants a card**
-- Cloudflare D1: storage cap, daily rows-read cap
-- PocketHost: free instance, sleeps when idle, disk cap
+- **Static hosting:** requests usually unmetered, builds usually capped per month
+- **Edge functions:** a daily request cap and a CPU-time-per-invocation cap
+- **Key-value stores:** reads generous, **writes are the tight one**
+- **Object storage:** watch egress pricing, and whether it wants a card on file
+- **Serverless SQL:** a storage cap and a daily rows-read cap
+- **Managed app instances:** one free instance, sleeps when idle, capped disk
 - GitHub Actions: monthly minutes, free for public repos
 
 ## Presenting a stack decision

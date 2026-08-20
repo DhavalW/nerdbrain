@@ -89,21 +89,7 @@ why a line in this repo says what it says.
 - **Target:** `../instructions/meta-rules.md`
 - **Status:** shipped
 
-### obs-0035 — 2026-08-17
-- **Observation:** On PocketBase, `required: true` on a number field means "must not be
-  zero", not "must be present" — any numeric field where zero is a legitimate value has to
-  be left non-required or it rejects a valid write.
-- **Rests on:** seen once (2026-08-17)
-- **Target:** `../instructions/platforms/pocketbase.md`
-- **Status:** shipped
 
-### obs-0036 — 2026-08-17
-- **Observation:** Record the response shapes a vendor's client is most often assumed wrong
-  — a pack that only says "read the docs" is followed by a client that didn't, and the
-  balance-check endpoint is the one whose wrong shape fails before any work is done.
-- **Rests on:** seen once (2026-08-17)
-- **Target:** `../instructions/platforms/keywords-everywhere.md`
-- **Status:** shipped
 
 ### obs-0041 — 2026-08-17
 - **Observation:** Write a status report for a reader who is not reading the code — what

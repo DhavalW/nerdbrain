@@ -39,5 +39,5 @@ consumed slowly. Wrong voice for dashboards, playful consumer apps, data-dense a
 
 ## Pairs with
 
-`../types/static-site.md` builds and `../stacks/astro-content.md` most naturally; works
+`../types/static-site.md` builds and content-oriented stacks most naturally; works
 for focused single-purpose tools too.

@@ -107,7 +107,7 @@ takes to update them.
 | `/nerdbrain list` | Prints the inventory |
 | `/nerdbrain refresh` | Force-pulls the repo |
 | `/nerdbrain docs <topic>` | Looks up the topic's page range and reads it |
-| `/update-instructions-in-nerdbrain-repo <rule>` | Turns one line into a placed, styled, gated rule |
+| `/update-nerdbrain <rule>` | Turns one line into a placed, styled, gated rule |
 | `/refresh-nerdbrain` | Rebuilds derived content after files change |
 
 Cloned somewhere other than `~/.nerdbrain`? Set `NERDBRAIN_HOME` to point at it.
@@ -119,16 +119,20 @@ For a project that should pick the packs up every session with no repo attached 
 
 Fork it. The brain is only as good as what's in it, and what's in it should be yours.
 
-1. **Fork, clone, install.** The packs that ship are opinionated defaults — good ones, but
-   defaults. Strike any of them.
-2. **Empty what isn't yours.** `instructions/profile.md` starts nearly blank on purpose;
-   `memory/observations.md` ships with candidate rules from other people's work, and
+1. **Fork, clone, install.** What ships is the craft layer — how to plan, test, secure,
+   write and ship — plus the machinery that learns. Opinionated defaults, and yours to
+   strike.
+2. **Empty what isn't yours.** `instructions/profile.md` starts nearly blank on purpose,
+   and `memory/observations.md` ships with candidate rules from other people's work —
    clearing it is a supported starting state.
 3. **Work normally.** The repo fills up on its own. When it asks to promote something, say
    yes or ignore it — ignoring costs nothing.
-4. **Capture the docs your work depends on.** Drop a PDF into `docs/references/<source>/`
+4. **Write a platform pack the second time you look something up.** `platforms/` ships
+   empty because your platforms aren't anyone else's, and
+   `instructions/platforms/_template.md` is the form.
+5. **Capture the docs your work depends on.** Drop a PDF into `docs/references/<source>/`
    and push; a workflow drafts its index and opens a pull request.
-5. **Send the general ones home.** `CONTRIBUTING.md` has the shape.
+6. **Send the general ones home.** `CONTRIBUTING.md` has the shape.
 
 ### Bringing your own docs
 
@@ -142,17 +146,16 @@ around. Nothing here requires it — the filename convention is the only contrac
 ## What's in the repo
 
 ```
-instructions/    the router (index.md), the always-loaded core.md and profile.md, the packs
-                 (topic packs at the top level, types/ and platforms/ beneath), and the
-                 checkpoint menus: architectures/, stacks/, themes/
+instructions/    the router (index.md), the always-loaded core.md and profile.md, the
+                 topic packs, project-type packs under types/, your own platform packs
+                 under platforms/, and the checkpoint menus: architectures/, stacks/,
+                 themes/
 memory/          the ledger: index.md is the format, observations.md the live entries,
                  archive.md the finished ones
 docs/            index.md, wanted.md, plus references/<source>/ for your doc snapshots and
                  each source's own page-map index
-skill/           one directory per skill: /nerdbrain, /update-instructions-in-nerdbrain-repo,
+skill/           one directory per skill: /nerdbrain, /update-nerdbrain,
                  /refresh-nerdbrain
-proposals/       parked designs, thought through and not built. Governs nothing, is not
-                 routed, and the gate keeps it that way
 templates/       CLAUDE.md drop-in for projects
 tools/           index-pdf.py drafts page maps, autoindex.py drafts whole index entries,
                  staleness.py reports what's going out of date, check.py is the gate

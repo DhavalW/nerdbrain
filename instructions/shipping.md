@@ -5,8 +5,8 @@ you're touching.
 
 ## Environments
 
-- Local, preview, production. Preview per branch — Cloudflare Pages gives this via the
-  GitHub integration for free (see `platforms/cloudflare.md`).
+- Local, preview, production. Preview per branch — most static hosts give this free off a
+  GitHub connection, and it is worth choosing a host that does.
 - Production data never reaches local or preview. Seed instead.
 - Every environment-specific value comes from config, never a hardcoded conditional.
 - `.env.example` lists every variable with a comment on what it's for and where to get it.

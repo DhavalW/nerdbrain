@@ -42,5 +42,5 @@ paired with a quieter theme for the product behind the landing page.
 
 ## Pairs with
 
-`../stacks/astro-content.md` naturally; copy must match the register — assertive and
+a content-oriented static stack naturally; copy must match the register — assertive and
 specific (`../copy.md`), because bold visuals over vague words collapse instantly.

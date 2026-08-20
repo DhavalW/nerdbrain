@@ -118,9 +118,8 @@ hardcoded here. Menus of proven templates live in `architectures/`, `stacks/`, a
 `themes/` (inventoried in `index.md`). At the decision checkpoint:
 
 1. **Present the 2–3 relevant options from each menu that matters for this project** —
-   tradeoffs and a marked recommendation, like any checkpoint question.
-   `stacks/default-free-tier.md` is the standing recommendation unless the project's
-   shape argues otherwise.
+   tradeoffs and a marked recommendation, like any checkpoint question. An empty menu means
+   propose from first principles, then capture what shipped so the next project has one.
 2. **Always include custom** — from scratch, or a named template with stated deviations.
 3. **Wait for the choice.** Then follow the chosen templates and their best practices for
    the whole project — in addition to, never instead of, the applicable packs.

@@ -1,19 +1,28 @@
 ---
-name: update-instructions-in-nerdbrain-repo
-description: Turn a one-line ask into a durable rule in the nerdbrain repo — find the pack it belongs in, write it in house style, rebuild the router and inventory, run the gate, commit and push. Use when the user types /update-instructions-in-nerdbrain-repo, or asks to add a rule, standard, preference or house rule to their instructions, to remember a correction so it applies next time, or to change or drop something a pack already says. Operates on the nerdbrain repo only — never on a target project's own CLAUDE.md, even when nerdbrain is attached there as a reference.
+name: update-nerdbrain
+description: Turn a one-line ask into a durable rule in the nerdbrain repo — find the pack it belongs in, write it in house style, rebuild the router and inventory, run the gate, commit and push. Use when the user types /update-nerdbrain, or asks to add a rule, standard, preference or house rule to their instructions, to remember a correction so it applies next time, or to change or drop something a pack already says. Operates on the nerdbrain repo only — never on a target project's own CLAUDE.md, even when nerdbrain is attached there as a reference.
 ---
 
-# update-instructions-in-nerdbrain-repo
+# update-nerdbrain
 
 The shorthand for "make this a standing rule." The user states it once, in a line. This
 skill does the pedantic part: placement, house style, derived content, the gate, the commit.
 
 ## 1. Confirm you're in the right repo
 
+**This is the step the short name makes load-bearing.** `/update-nerdbrain` reads like a
+request to update whatever instructions are in front of you, and it is not one: it edits the
+nerdbrain repo and nothing else, ever.
+
 `instructions/index.md` and `tools/check.py` both present, or you are not in nerdbrain. When
 this session has nerdbrain attached as a reference beside another repo, the edit lands in the
-nerdbrain clone and nowhere else. A rule that only governs *that* project belongs in its own
-`CLAUDE.md` — if the ask reads that way, say which one you think it is and stop.
+nerdbrain clone and nowhere else — never in the target project's `CLAUDE.md`, `AGENTS.md`,
+`.cursorrules` or any other instruction file it carries.
+
+A rule that governs only *that* project belongs in that project's own file. If the ask reads
+that way, say which one you think it is and stop — writing a project-local rule into the
+portable brain pollutes every future session, and writing a portable rule into one project
+loses it.
 
 ## 2. Restate the rule before placing it
 
@@ -108,7 +117,7 @@ Don't read the pack back to the user. They wrote it.
 
 | Invocation | Do |
 |---|---|
-| `/update-instructions-in-nerdbrain-repo <rule>` | Place that rule |
-| `/update-instructions-in-nerdbrain-repo` | Take the rule from the conversation just now — the correction, the thing that went wrong, the preference said in passing. Restate it and get a yes before writing |
-| `/update-instructions-in-nerdbrain-repo <pack>: <rule>` | Placement is settled; edit that pack |
-| `/update-instructions-in-nerdbrain-repo drop <rule>` | Take a rule out. Deleting is destructive (`instructions/destructive-actions.md`) — name exactly what goes and wait for the answer |
+| `/update-nerdbrain <rule>` | Place that rule |
+| `/update-nerdbrain` | Take the rule from the conversation just now — the correction, the thing that went wrong, the preference said in passing. Restate it and get a yes before writing |
+| `/update-nerdbrain <pack>: <rule>` | Placement is settled; edit that pack |
+| `/update-nerdbrain drop <rule>` | Take a rule out. Deleting is destructive (`instructions/destructive-actions.md`) — name exactly what goes and wait for the answer |

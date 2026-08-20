@@ -28,7 +28,7 @@ The most common real-world hole: the client is asked nicely not to do something.
   session.
 - Watch for IDOR: sequential IDs plus a missing ownership check is the classic bug.
 
-For PocketBase specifically, this is all API rules — see `platforms/pocketbase.md`.
+On a backend-as-a-service this is per-collection access rules, not route handlers.
 
 ## Input
 

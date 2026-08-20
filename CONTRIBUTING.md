@@ -13,7 +13,6 @@ Contributions are that loop, run across forks instead of across sessions.
 | Knowledge of a platform nothing covers | `instructions/platforms/<name>.md`, from `instructions/platforms/_template.md` | Maintainer merge |
 | A candidate rule with thin evidence | One entry in `memory/observations.md` | None needed — it governs nothing |
 | A gap in the docs mechanism | `docs/wanted.md`, or an issue | None needed |
-| A design you thought through and didn't build | `proposals/` | Maintainer merge |
 
 Ledger entries are the low-friction path and the one to reach for when unsure. An entry
 changes no behavior, so it needs no argument — it just stops the observation dying with the
