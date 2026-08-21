@@ -4,7 +4,7 @@ Five mechanisms. Each one exists because a simpler version of it failed in a spe
 and each is stated here with that failure attached — a mechanism whose reason is missing gets
 "simplified" back into the thing it replaced.
 
-1. **Routing** — the agent loads two to four packs, not forty.
+1. **Routing** — the agent loads the packs the task needs, not all forty.
 2. **The ledger** — lessons get recorded without needing anyone's permission.
 3. **The approval gate** — lessons become rules only when you say so, per item.
 4. **The doc index** — six pages of a vendor PDF instead of a guess from memory.
@@ -30,7 +30,7 @@ flowchart TB
 
     T --> R
     R --> A
-    R -->|"2–4 that match"| P
+    R -->|"every one that matches"| P
     R -->|"only if a platform is in play"| D
     A --> W["the work"]
     P --> W
@@ -78,11 +78,14 @@ flowchart LR
 
 Three rules make it hold:
 
-- **Re-route when the work turns.** A new surface, a new concern, a new platform. Route the
-  sub-task, not just the task.
+- **Re-route at every task, and every iteration of one.** Not only when the work changes
+  kind. The router is already in context, so the check is free, and the delta rule below
+  means most checks load nothing.
 - **Read the delta, never the set.** A pack already in context is still in force. Re-reading
   it costs context and buys nothing.
-- **Two to four is normal, six is a lot.** Loading everything defeats the purpose.
+- **Load every match, all of it.** There is no count to hit. The minimum that covers the
+  work is the target, and a pack dropped to keep a number down takes its rules with it. The
+  economy is in not reading what the router didn't match.
 
 ### Precedence
 

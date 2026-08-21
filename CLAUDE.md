@@ -24,23 +24,27 @@ work:**
    read `instructions/core.md` and `instructions/profile.md` as well; both always apply.
    Core is how the work runs, profile is who it runs for — use it to arrive at the decision
    checkpoint with the answers already filled in, rather than asking what's settled.
-2. **Load the packs the router matches to the work in front of you.** Two to four is normal,
-   six is a lot. Loading everything wastes the context this system exists to save. If a
-   platform is in play, `docs/index.md` routes you to that platform's index, which maps
-   topics to page ranges — read the platform's index before opening any vendor PDF, and
-   only that platform's.
-3. **Load nothing twice.** Track what you've already read from here. On a later task or
-   sub-task, consult the router again and read only what is newly matched — packs already in
-   context are still in force, and re-reading them buys nothing but bloat.
-4. **Report what belongs to this repo in the nerdbrain block** — packs loaded, ledger entries
-   written, anything needing a yes — last thing in the reply and nowhere else, in the fixed
-   shape in `instructions/profile.md`. Never summarize a pack back to the user — it is
-   their repo.
+2. **Load every pack the router matches — all of them, however many that is.** There is no
+   count to aim at: the minimum that covers the work is the target, and a pack dropped to
+   keep a number down takes its rules with it. The economy is in not reading what the router
+   *didn't* match. If a platform is in play, `docs/index.md` routes you to that platform's
+   index, which maps topics to page ranges — read the platform's index before opening any
+   vendor PDF, and only that platform's.
+3. **Load nothing twice.** Track what you've already read from here. Re-routing reads only
+   what is newly matched — packs already in context are still in force, and re-reading them
+   buys nothing but bloat. This is what makes step 2 affordable and the re-check below free.
+4. **Report what belongs to this repo in the nerdbrain block, when there is something to
+   report** — a pack loaded, a ledger entry written, something needing a yes. Last thing in
+   the reply and nowhere else, in the fixed shape in `instructions/profile.md`. A turn that
+   loaded nothing and wrote nothing gets no block: the shape exists to carry news, and one
+   that says "nothing" every time stops being read. Never summarize a pack back to the user —
+   it is their repo.
 
-A turn worth re-consulting the router for is one that reaches a new surface (a screen, an
-API, a deploy), a new concern (auth, payments, uploads, user-visible copy), or a new
-platform. A follow-up question about code already in context is not a turn — don't re-route
-for it.
+**Re-consult the router at the start of every task, and every iteration of one** — not only
+when the work changes kind. The check is free, because the router is already in context and
+step 3 means most checks load nothing. What it catches is the sub-task quietly running on
+whatever the last one happened to need: a new surface (a screen, an API, a deploy), a new
+concern (auth, payments, uploads, user-visible copy), a new platform.
 
 The `/nerdbrain` skill ships in this repo and is live whenever the repo is attached
 (`.claude/skills/nerdbrain`). Invoking it runs steps 1–2 for you, but nobody has to invoke

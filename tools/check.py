@@ -461,9 +461,19 @@ BUDGETS = {
     # never open a pack, so a change that leaves them stale ships a lie to
     # exactly the audience that cannot check it. 295 -> 293 when the parked-work
     # folder was dropped and its paragraph went with it.
-    "CLAUDE.md": 293,
+    #
+    # 293 -> 297 for the routing rules the user restated: load every match rather
+    # than a count, re-route at every task boundary rather than only when the work
+    # changes kind, and show the report block only when it has news. All three are
+    # reference-mode behavior, which is the half of this file that a session
+    # working in another repo actually executes.
+    "CLAUDE.md": 297,
     "docs/index.md": 95,            # the doc router; keep it a router
-    "instructions/index.md": 170,   # the pack inventory; grows with the packs
+    # The pack inventory; grows with the packs. 170 -> 175 for the loading
+    # discipline rewrite: no count cap, route every iteration, read the delta.
+    # Three rules where there were two, and the third is what makes the second
+    # affordable, so none of them stands alone.
+    "instructions/index.md": 175,
     # The one always-loaded file that is SUPPOSED to grow, because it grows by
     # learning something and shortens the checkpoint in exchange. 100 -> 165 when
     # it took on the base writing method and both nerdbrain blocks. The approvals
@@ -474,7 +484,13 @@ BUDGETS = {
     # empty, so it has to say what belongs in each section and what an empty
     # section means. That text is read once per fork and then deleted as real
     # lines replace it - trim this number as they do.
-    "instructions/profile.md": 175,
+    # 175 -> 185 for the rule that the block only appears when it has something
+    # to report. It costs more lines than the rule it replaced because it has to
+    # resolve a conflict rather than state a preference: obs-0042 put the `plain`
+    # self-check in the block precisely so it happened every reply, and a block
+    # that can now be absent needs to say the check still runs when the printing
+    # does not.
+    "instructions/profile.md": 185,
     # --- already over the ceiling: pinned at their exact current size, so every
     # --- further line is a deliberate, visible decision. Trim one, lower its number.
     "instructions/security.md": 105,
@@ -515,14 +531,20 @@ BUDGETS = {
 # capped - so splitting a big always-on file into three smaller ones cannot
 # clear the per-file budgets while costing a reader exactly as much as before.
 #
-# The total is the sum of the members' own budgets above: 293 + 170 + 165 + 175.
+# The total is the sum of the members' own budgets above: 297 + 175 + 165 + 185.
 # Every member now has an entry, profile.md included - it earned one when it took
 # on the writing method and the nerdbrain block, both of which have to apply to
 # every reply and so cannot live in an on-demand pack.
 #
 # 689 -> 787 as those landed, then 787 -> 803: up for the upstream-contribution rule
 # and the profile's fill-in scaffolding, down further when the platform table left the
-# router. The ratchet works in both directions and this is the direction to prefer. The profile is still the member that is SUPPOSED to
+# router. The ratchet works in both directions and this is the direction to prefer.
+#
+# 803 -> 822 for the routing and reporting rules stated outright by the user
+# (obs-0045 to obs-0047). This is the trade the always-loaded set exists to make
+# visible: 19 lines paid on every session, against a sub-task that runs on the
+# wrong packs because nobody re-checked, and a status block nobody reads because
+# it speaks every turn. Worth it, and worth seeing in the diff. The profile is still the member that is SUPPOSED to
 # grow, because it grows by learning something and pays for itself by shortening
 # the checkpoint - a profile that answers three standard questions has already
 # earned its lines back.
@@ -535,7 +557,7 @@ BUDGETS = {
 # which is a change to when its rules apply, and belongs at a checkpoint.
 ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
                  "instructions/profile.md")
-ALWAYS_LOADED_BUDGET = 803
+ALWAYS_LOADED_BUDGET = 822
 
 
 def check_always_loaded_total(errors):

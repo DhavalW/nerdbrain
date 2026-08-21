@@ -14,17 +14,19 @@ nothing in this repo.
 
 1. **Read `instructions/core.md` and `instructions/profile.md` once per session.** Core is
    how the work runs; profile is who it runs for. Both always apply.
-2. **Consult the router — `instructions/index.md` — before starting, and again whenever the
-   work turns into a different kind of work.** A new surface, a new concern (auth, payments,
-   uploads, user-visible copy), a new platform. A follow-up about code already in context is
-   not a turn.
-3. **Load the two-to-four packs the router matches.** Six is a lot. Loading everything wastes
-   the context this system exists to save.
+2. **Consult the router — `instructions/index.md` — at the start of every task and every
+   iteration of one**, not only when the work changes kind. It is already in context, so the
+   check is free, and rule 4 means most checks load nothing. What it catches is a sub-task
+   running on whatever packs the last one needed.
+3. **Load every pack the router matches — all of them.** No count to hit: the minimum that
+   covers the work is the target, and a pack dropped to keep the number down takes its rules
+   with it. The economy is in not reading what the router didn't match.
 4. **Never load the same pack twice.** A pack in context is still in force; re-reading it
-   buys nothing but bloat.
-5. **Report what belongs to this repo in the nerdbrain block**, last thing in the reply and
-   nowhere else — packs loaded, ledger entries written, approvals waiting. The shape is in
-   `instructions/profile.md`. Don't summarize a pack back to the user; it is their repo.
+   buys nothing but bloat. This is what makes rules 2 and 3 affordable.
+5. **Report what belongs to this repo in the nerdbrain block, when there is something to
+   report** — a pack loaded, a ledger entry written, an approval waiting. Last thing in the
+   reply and nowhere else; the shape is in `instructions/profile.md`. A turn that loaded and
+   wrote nothing gets no block. Don't summarize a pack back to the user; it is their repo.
 
 Platform docs work the same way: `docs/index.md` routes to a platform's index, and that index
 maps topics to page ranges. Read the index before opening any PDF, and only the platform you

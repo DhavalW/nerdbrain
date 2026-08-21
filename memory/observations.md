@@ -254,3 +254,28 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-17)
 - **Target:** `../instructions/stack-and-architecture.md`
 - **Status:** open
+
+### obs-0045 — 2026-08-21
+- **Observation:** Load every pack the router matches and never trim the set to hit a
+  count — a pack dropped to keep a number down takes its rules with it, and the economy
+  belongs in what was never matched.
+- **Rests on:** stated outright (2026-08-21)
+- **Target:** `../instructions/index.md`
+- **Status:** shipped
+
+### obs-0046 — 2026-08-21
+- **Observation:** Re-consult the router at the start of every task and every iteration of
+  one, not only when the work changes kind — the check is free where the router is already
+  in context and only the delta is read, and what it catches is a sub-task running on
+  whatever the previous one happened to need.
+- **Rests on:** stated outright (2026-08-21)
+- **Target:** `../instructions/index.md`
+- **Status:** shipped
+
+### obs-0047 — 2026-08-21
+- **Observation:** Show a fixed status block only on the turns it has something to report,
+  because one that says "nothing" on every reply trains the reader to skip it and then
+  fails on the reply that mattered.
+- **Rests on:** stated outright (2026-08-21)
+- **Target:** `../instructions/profile.md`
+- **Status:** shipped

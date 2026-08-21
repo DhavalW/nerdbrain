@@ -77,13 +77,13 @@ goes into the batch pre-filled and marked as from the profile, for correction ra
 composition. Asking cold what the profile settles is the waste this system exists to remove.
 
 Then read the router table in `instructions/index.md` and load the packs that match the task
-at hand.
-**Load 2–4. Not all of them.** Loading everything wastes the context this system exists to
-save.
+at hand. **Load all of them.** There is no count to hit — the minimum that covers the work
+is the target, and a pack left out to keep the number down takes its rules with it. What you
+don't read is everything the router didn't match.
 
 **Skip what you already have.** If packs were loaded earlier in this session, read only what
 the current task newly matches. A pack in context is still in force; re-reading it is pure
-bloat.
+bloat — and it is what makes re-routing cheap enough to do every time.
 
 If a platform is in play, read `docs/index.md` — a router — and open only that platform's
 index from it for the page ranges. Reading another platform's maps is the bloat this whole
@@ -98,22 +98,28 @@ Follow the loaded packs for the rest of the session, at the precedence stated in
 `instructions/index.md`: the user's instructions beat the project's conventions, which
 beat the packs.
 
-Route every sub-task, not just the first one. When the work turns — a new surface, a new
-concern (auth, payments, uploads, user-visible copy), a new platform — go back to the router
-table and load what is newly matched. A follow-up on code already in context is not a turn.
+Route every task and every iteration of one, not just the first. Go back to the router table
+at each new piece of work and load whatever is newly matched — a new surface, a new concern
+(auth, payments, uploads, user-visible copy), a new platform. Most checks will match nothing
+new, which is the point: the check is free and the miss is not.
 
 ## 5. Confirm
 
 Everything belonging to this repo goes in one block, last thing in the reply — packs loaded,
 ledger entries written, approvals waiting — and nowhere else in the reply. That is what lets
-the user tell meta-work from the project they actually asked about:
+the user tell meta-work from the project they actually asked about.
+
+**Only when there is something in it.** A pack loaded or dropped, a ledger entry written or
+bumped, something proposed for this repo. A turn that re-routed and matched nothing new gets
+no block — the shape carries news, and one that reports "nothing" every reply stops being
+read before the reply where it counted.
 
 ```
 
 
   ─── nerdbrain ─────────────────────────────
 
-  packs     core planning stack-and-architecture platforms/pocketbase
+  packs     core planning stack-and-architecture security ux-user
 
   ───────────────────────────────────────────
 
@@ -122,8 +128,8 @@ the user tell meta-work from the project they actually asked about:
 
 The blank lines inside the fence are part of the format — they are what makes it read as a
 separate block rather than more reply. Later in the same session, report the delta only:
-`packs    +copy +ux-user`. The full shape, and the rule that it stays rigid, are in
-`instructions/profile.md`.
+`packs    +copy +ux-user`, and nothing at all on the turns where the delta is empty. The
+full shape, and the rule that it stays rigid, are in `instructions/profile.md`.
 
 Do not summarize the packs back to the user. It is their repo.
 

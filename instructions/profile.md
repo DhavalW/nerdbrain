@@ -87,11 +87,20 @@ rule. A fence preserves whitespace where prose collapses it, and that is the onl
 gap survives into what I actually see. A table cannot: no vertical air, wraps badly in a
 narrow terminal, and reads as content rather than as a margin note.
 
-The `plain` row is never omitted — `pass`/`fail` on jargon, then the line count against the
-15-line cap. It proves nothing on its own; it forces one read as I will read it (obs-0042).
+**The block appears only when it has something to report** (obs-0047). In reference mode
+that means one of three things happened this turn: a pack was loaded or dropped, a ledger
+entry was written or bumped, or something about this repo is being proposed or changed. A
+turn that re-routed and matched nothing new gets **no block at all** — routing still
+happened, it just has nothing to say. A block that reports "nothing" on every reply is one
+I stop reading, and then it fails on the turn it mattered.
 
-Omit a row with nothing to say, and the whole block on a turn that touched none of it. More
-than one block per reply is fine and normal — one word after `nerdbrain ·` says which is which.
+Omit any row with nothing in it. The `plain` row is the exception *within* a block that is
+already being shown: where there is a block, it carries `pass`/`fail` on jargon and the line
+count against the 15-line cap (obs-0042). Where there is no block, do the read anyway — the
+saving is the printing, never the checking.
+
+More than one block per reply is fine and normal — one word after `nerdbrain ·` says which
+is which.
 
 ### The approvals block
 

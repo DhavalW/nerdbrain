@@ -73,7 +73,8 @@ you work  →  agent notices  →  ledger entry  →  you approve  →  it's a r
 Four moving parts:
 
 **A router, not a manifesto.** `instructions/index.md` maps the shape of a task to the two
-to four packs it actually needs. Everything else stays out of context.
+packs it actually needs — all of them, and nothing else. Everything unmatched stays out of
+context.
 `instructions/core.md` (how the work runs) and `instructions/profile.md` (who it runs for)
 are always loaded, and deliberately short.
 

@@ -20,7 +20,8 @@ This project follows the instruction packs in the `nerdbrain` repo.
    `https://github.com/dhavalw/nerdbrain.git` to `~/.nerdbrain`. If it can't be reached, say so
    in one line and carry on without it.
 2. Read `instructions/index.md` (the router) and `instructions/core.md` (always applies).
-3. Load the packs the router table matches to the task. Two to four, not all of them.
+3. Load every pack the router table matches — all of them, however many. What you skip is
+   everything it didn't match.
 4. Read `docs/index.md` before opening any vendor PDF — it maps topics to page ranges.
 5. Re-consult the router whenever the work turns into a different kind of work — a new
    surface, a new concern (auth, payments, user-visible copy), a new platform — and load

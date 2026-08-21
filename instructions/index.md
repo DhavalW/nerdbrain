@@ -6,23 +6,30 @@ Modular instruction packs. Load only what the task needs.
 
 1. **Always read `core.md` and `profile.md`.** Both are short and non-negotiable — how the
    work runs, and who it runs for.
-2. **Match the task against the router table below.** Load the packs that match.
-3. **Load more mid-task** as the work turns. You do not have to decide everything up front.
-4. **Do not read every pack.** Loading everything defeats the purpose. 2–4 packs is normal,
-   6 is a lot.
+2. **Match the task against the router table below.** Load every pack that matches.
+3. **Load the minimum that covers the work — and never less than that.** There is no count
+   to hit. Four packs where the task needs four, seven where it needs seven. A pack the
+   router matched is a pack the work needs, and dropping one to keep a number down is how
+   the rule it carried gets broken.
+4. **Do not read what the router did not match.** That is the whole economy, and it is
+   enough: an unmatched pack is context spent on work you are not doing.
 
 If the user names a pack explicitly ("use the design pack", "skip the anti-AI-tells rules"),
 their instruction wins over this table.
 
 ### Loading discipline
 
-The point of the router is that context stays cheap. Two rules keep it that way:
+Context stays cheap through *what* is loaded, never through *how much*. Three rules:
 
-- **Come back here when the work turns** — a new surface, a new concern (auth, payments,
-  uploads, user-visible copy), a new platform. Route the sub-task, not just the task.
+- **Route every task, and every iteration of one.** Come back here at the start of each new
+  piece of work in a session — not only when the work changes kind. The check costs nothing:
+  this table is already in context. What it prevents is a sub-task running on whatever packs
+  the last one happened to need.
 - **Read the delta, never the set.** Track what you have already loaded this session. A pack
-  in context stays in force; re-reading it costs context and buys nothing. Announce what you
-  added in one line and get on with the work.
+  in context stays in force; re-reading it costs context and buys nothing. Most re-routes
+  match nothing new — that is the expected result of a cheap check, not a wasted one.
+- **Load everything the match names.** No cap, no trimming to a number. The router decides
+  what the minimum is; your job is to not go under it.
 
 ## Router
 
