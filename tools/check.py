@@ -473,7 +473,11 @@ BUDGETS = {
     # discipline rewrite: no count cap, route every iteration, read the delta.
     # Three rules where there were two, and the third is what makes the second
     # affordable, so none of them stands alone.
-    "instructions/index.md": 175,
+    # 175 -> 181 for what replaces the deleted count cap: match precision and
+    # last-responsible-moment loading. Deleting a cap without a replacement removes
+    # the discipline along with the number, and these six lines are that
+    # replacement (obs-0048).
+    "instructions/index.md": 181,
     # The one always-loaded file that is SUPPOSED to grow, because it grows by
     # learning something and shortens the checkpoint in exchange. 100 -> 165 when
     # it took on the base writing method and both nerdbrain blocks. The approvals
@@ -494,7 +498,12 @@ BUDGETS = {
     # --- already over the ceiling: pinned at their exact current size, so every
     # --- further line is a deliberate, visible decision. Trim one, lower its number.
     "instructions/security.md": 105,
-    "instructions/core.md": 165,  # always loaded - the worst one to bloat
+    # Always loaded - the worst one to bloat. 165 -> 168 for the standing rule that
+    # context is spent like it runs out: page range not file, delta not set,
+    # function not module. Four lines that cost every session in order to save far
+    # more in most of them, and the rule names the asymmetry so it can never be
+    # cited to skip something the work actually needs.
+    "instructions/core.md": 168,
     "instructions/documentation.md": 108,
     # The biggest pack here, and the one to trim first when someone has time.
     # It stays whole because there is no honest seam: capture, the backlog
@@ -531,7 +540,7 @@ BUDGETS = {
 # capped - so splitting a big always-on file into three smaller ones cannot
 # clear the per-file budgets while costing a reader exactly as much as before.
 #
-# The total is the sum of the members' own budgets above: 297 + 175 + 165 + 185.
+# The total is the sum of the members' own budgets above: 297 + 181 + 168 + 185.
 # Every member now has an entry, profile.md included - it earned one when it took
 # on the writing method and the nerdbrain block, both of which have to apply to
 # every reply and so cannot live in an on-demand pack.
@@ -557,7 +566,7 @@ BUDGETS = {
 # which is a change to when its rules apply, and belongs at a checkpoint.
 ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
                  "instructions/profile.md")
-ALWAYS_LOADED_BUDGET = 822
+ALWAYS_LOADED_BUDGET = 831
 
 
 def check_always_loaded_total(errors):

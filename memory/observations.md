@@ -279,3 +279,12 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-21)
 - **Target:** `../instructions/profile.md`
 - **Status:** shipped
+
+### obs-0048 — 2026-08-21
+- **Observation:** When a numeric cap is removed from a loading rule, replace it with a
+  precision rule and a timing rule — a match means the work actually does this thing rather
+  than plausibly might, and it loads when the work reaches it — because a cap that is
+  deleted without a replacement takes the discipline with it, not just the number.
+- **Rests on:** stated outright (2026-08-21)
+- **Target:** `../instructions/index.md`
+- **Status:** shipped

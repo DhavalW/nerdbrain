@@ -86,6 +86,9 @@ Three rules make it hold:
 - **Load every match, all of it.** There is no count to hit. The minimum that covers the
   work is the target, and a pack dropped to keep a number down takes its rules with it. The
   economy is in not reading what the router didn't match.
+- **Precision replaces the cap.** A match means the task actually does this thing, not that
+  it plausibly might — and a pack is loaded when the work reaches it, not up front in case.
+  That is what keeps context cheap once counting stops.
 
 ### Precedence
 

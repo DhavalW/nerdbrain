@@ -30,6 +30,14 @@ Context stays cheap through *what* is loaded, never through *how much*. Three ru
   match nothing new — that is the expected result of a cheap check, not a wasted one.
 - **Load everything the match names.** No cap, no trimming to a number. The router decides
   what the minimum is; your job is to not go under it.
+- **Precision is the whole budget.** With no count cap, the only thing keeping context cheap
+  is that a match means the task actually does this thing — not that it plausibly might.
+  Adjacent to auth is not `security.md`. When a pack is a maybe, leave it: the re-route at
+  the next iteration catches it the moment it becomes a yes, and that is what re-routing is
+  for.
+- **Load at the last responsible moment.** A pack the work reaches on its fourth step gets
+  loaded on the fourth step, not up front in case it comes up. Same set by the end, less of
+  it held while it does nothing.
 
 ## Router
 

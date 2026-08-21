@@ -151,6 +151,10 @@ hardcoded here. Menus of proven templates live in `architectures/`, `stacks/`, a
   untested. Not "should work."
 - **Don't widen scope.** A bug fix is a bug fix, not a refactor of the surrounding module.
   Notice the other thing, mention it in a line, move on.
+- **Spend context like it runs out, because it does.** The page range, not the file; the
+  delta, not the set; the function, not the module around it. Never a reason to skip
+  something the work needs — under-reading buys a wrong answer, which costs more than the
+  tokens saved (`index.md`).
 - **End by recording what the task taught.** A correction, a preference said in passing, a
   pattern that held — or a thing seen exactly once, recorded as exactly that. Generalized
   past this project, after the work is done. It goes in the ledger, which needs no
