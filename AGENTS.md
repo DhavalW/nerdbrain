@@ -54,6 +54,20 @@ need.
 project's own conventions, then these packs. The rules in `CLAUDE.md` govern *this* repo only
 — never impose them on the project being worked on.
 
+## When the work needs docs this repo doesn't have
+
+Write the gap down at the moment you hit it — that session is the only one that knows it
+exists. A crawlable start URL goes in `docs/scrape-list.md`, in the four-column shape that
+file sets out; anything a person has to fetch by hand goes in `docs/wanted.md`. Neither
+needs approval, because neither governs anything.
+
+Rows in `docs/scrape-done.md` are receipts from the capture tool, and clearing them is a
+session-start job: check the PDF is on disk under `docs/references/<source>/`, has selectable
+text, covers the section that was asked for, is listed and mapped in that folder's own index,
+and that `tools/check.py` is green. All five, and both rows go in the same commit. Any of
+them failing, both rows stay and the reply says which. `instructions/doc-capture.md` is the
+full protocol.
+
 ## When the work turns up something worth keeping
 
 A correction, a preference said in passing, an approach that held, a pack that was wrong or

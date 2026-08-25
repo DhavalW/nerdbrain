@@ -144,6 +144,12 @@ documentation that only exists as a website, **[SiteToPDF](https://sitetopdf.com
 companion tool: it turns a docs site into the dated, multi-part PDFs this index is shaped
 around. Nothing here requires it — the filename convention is the only contract.
 
+**And it can take the ask from here.** A session that needs docs this repo doesn't have
+writes a row into `docs/scrape-list.md`. SiteToPDF, pointed at your fork, reads that queue,
+offers each row for a one-click yes, crawls it, commits the PDF, and leaves a receipt in
+`docs/scrape-done.md`. The next session checks the capture landed and clears both rows. The
+gap closes without anyone remembering it existed.
+
 ---
 
 ## What's in the repo
@@ -155,8 +161,9 @@ instructions/    the router (index.md), the always-loaded core.md and profile.md
                  themes/
 memory/          the ledger: index.md is the format, observations.md the live entries,
                  archive.md the finished ones
-docs/            index.md, wanted.md, plus references/<source>/ for your doc snapshots and
-                 each source's own page-map index
+docs/            index.md, wanted.md, the scrape-list.md / scrape-done.md capture queue,
+                 plus references/<source>/ for your doc snapshots and each source's own
+                 page-map index
 skill/           one directory per skill: /nerdbrain, /update-nerdbrain,
                  /refresh-nerdbrain
 templates/       CLAUDE.md drop-in for projects

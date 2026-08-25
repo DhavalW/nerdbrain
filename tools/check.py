@@ -29,6 +29,9 @@ Enforces the invariants that keep the pack system reliable as it grows:
      reads this file, so a malformed entry is a silently skipped observation.
  13. A `## Volatile claims` section marks every claim with a verify-by month,
      which is what makes tools/staleness.py able to report it.
+ 14. Every row in docs/scrape-list.md and docs/scrape-done.md parses, and every
+     receipt answers a queued row. A capture tool reads these, so a malformed
+     row is a capture that silently never happens.
 
 What this deliberately does NOT check is whether any of it is still TRUE - a
 page map that drifted from the document, an inventory line that stopped
@@ -378,6 +381,149 @@ VOLATILE_HEADING = re.compile(r"^## Volatile claims\s*$", re.M)
 VERIFY_BY = re.compile(r"verify by 20\d\d-(?:0[1-9]|1[0-2])\b")
 
 
+# The two halves of the capture queue, and the columns a capture tool depends on.
+# Enforced here rather than left to the tool, because the tool only ever sees the
+# rows it can parse: one written with the columns transposed simply never becomes
+# a capture, and nothing anywhere says so.
+SCRAPE_FILES = {
+    "docs/scrape-list.md": ("## Queue",
+                            ["Source", "Start URL", "Wanted for", "Requested"]),
+    "docs/scrape-done.md": ("## Captured",
+                            ["Source", "Start URL", "Captured", "Pages", "Parts"]),
+}
+
+SOURCE_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+START_URL = re.compile(r"^https?://\S+$")
+DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+MINUTE_UTC = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z$")
+
+
+def scrape_rows(name):
+    """The data rows under a scrape file's table heading, as lists of cells.
+
+    Yields (line number, cells). The header and its separator are skipped; so is
+    anything outside the section, which is where the format documentation lives.
+    """
+    heading, _columns = SCRAPE_FILES[name]
+    path = os.path.join(ROOT, name)
+    if not os.path.exists(path):
+        return
+
+    in_section = False
+    for n, raw in enumerate(open(path, encoding="utf-8"), 1):
+        line = raw.rstrip("\n").strip()
+        if line.startswith("## "):
+            in_section = line == heading
+            continue
+        if not in_section or not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if all(set(c) <= {"-", ":"} and c for c in cells):
+            continue  # the separator row
+        yield n, cells
+
+
+def check_scrape_queue(errors):
+    for name, (heading, columns) in SCRAPE_FILES.items():
+        path = os.path.join(ROOT, name)
+        if not os.path.exists(path):
+            errors.append(f"{name} is missing - the capture queue reads and writes it")
+            continue
+        text = open(path, encoding="utf-8").read()
+        if heading not in text:
+            errors.append(f"{name}: no `{heading}` section for the table to live under")
+            continue
+
+        seen_header = False
+        for n, cells in scrape_rows(name):
+            if not seen_header:
+                seen_header = True
+                if cells != columns:
+                    errors.append(
+                        f"{name}:{n}: table header is {cells}, expected {columns} - "
+                        f"a capture tool reads these columns by position"
+                    )
+                continue
+            if len(cells) != len(columns):
+                errors.append(
+                    f"{name}:{n}: {len(cells)} columns, expected {len(columns)} "
+                    f"({', '.join(columns)})"
+                )
+                continue
+            check_scrape_row(errors, name, n, dict(zip(columns, cells)))
+
+        if not seen_header:
+            errors.append(
+                f"{name}: `{heading}` has no table header row - keep the header and its "
+                f"separator even when the queue is empty, so a row can be appended"
+            )
+
+    check_receipts_answer_queue(errors)
+
+
+def check_scrape_row(errors, name, n, row):
+    where = f"{name}:{n}"
+    if not SOURCE_SLUG.match(row["Source"]):
+        errors.append(
+            f"{where}: source '{row['Source']}' is not a folder slug - lowercase, "
+            f"digits and single hyphens, matching docs/references/<source>/"
+        )
+    if not START_URL.match(row["Start URL"]):
+        errors.append(f"{where}: '{row['Start URL']}' is not an http(s) start URL")
+
+    if "Requested" in row and not DAY.match(row["Requested"]):
+        errors.append(f"{where}: requested '{row['Requested']}' is not YYYY-MM-DD")
+    if "Wanted for" in row and not row["Wanted for"]:
+        errors.append(f"{where}: no reason given - say in one line what the work needed")
+
+    if "Captured" in row and not MINUTE_UTC.match(row["Captured"]):
+        errors.append(
+            f"{where}: captured '{row['Captured']}' is not YYYY-MM-DDTHH:MMZ"
+        )
+    for field in ("Pages", "Parts"):
+        if field in row and not (row[field].isdigit() and int(row[field]) > 0):
+            errors.append(f"{where}: {field.lower()} '{row[field]}' is not a count")
+
+
+def check_receipts_answer_queue(errors):
+    """A receipt with no queued row behind it, or two rows for one source.
+
+    The pair is the mechanism: a queued row with a receipt beside it is one the
+    tool believes it has done and will not capture again, and both are deleted
+    together once a session has verified the PDF. An orphan on either side means
+    that reconcile went half-done - which reads, from the outside, exactly like a
+    capture that is still pending.
+    """
+    def keyed(name, skip_header=True):
+        columns = SCRAPE_FILES[name][1]
+        pairs = {}
+        for i, (n, cells) in enumerate(scrape_rows(name)):
+            if i == 0 and skip_header:
+                continue
+            if len(cells) != len(columns):
+                continue
+            row = dict(zip(columns, cells))
+            pairs.setdefault((row["Source"], row["Start URL"]), []).append(n)
+        return pairs
+
+    queued = keyed("docs/scrape-list.md")
+    done = keyed("docs/scrape-done.md")
+
+    for (source, url), lines in queued.items():
+        if len(lines) > 1:
+            errors.append(
+                f"docs/scrape-list.md:{lines[1]}: '{source}' is queued twice - one row "
+                f"per source; widen the start URL instead of adding a second"
+            )
+    for (source, url), lines in done.items():
+        if (source, url) not in queued:
+            errors.append(
+                f"docs/scrape-done.md:{lines[0]}: nothing queued '{source}' at {url} - "
+                f"a receipt and its queue row are deleted together, once the capture is "
+                f"verified (instructions/doc-capture.md)"
+            )
+
+
 def check_volatile_claims(errors):
     """A claim marked as volatile carries the month it must be re-verified by.
 
@@ -481,8 +627,19 @@ BUDGETS = {
     # would charge every session ~50 lines for the rare case. Don't fold it back
     # in, and don't split the trigger out after it - a check nobody is told to
     # run is a check that doesn't happen.
-    "CLAUDE.md": 341,
-    "docs/index.md": 95,            # the doc router; keep it a router
+    #
+    # 341 -> 349 for the capture queue: where a docs gap goes when a crawler can
+    # fill it, and the session-start job of clearing the receipts it leaves. Both
+    # are reference-mode behavior a session executes in somebody else's repo, and
+    # the reconcile in particular has no other trigger - a pack nobody is told to
+    # load is a pack that never runs, exactly as with the fork-sync check above.
+    # The protocol itself is in instructions/doc-capture.md, which loads only when
+    # there is a gap to queue or a row to clear.
+    "CLAUDE.md": 349,
+    # The doc router; keep it a router. 95 -> 101 for the capture queue: where the
+    # rows come from, where the receipts go, and the split with wanted.md that
+    # keeps the two worklists disjoint. It stays a router - no filenames, no maps.
+    "docs/index.md": 101,
     # The pack inventory; grows with the packs. 170 -> 175 for the loading
     # discipline rewrite: no count cap, route every iteration, read the delta.
     # Three rules where there were two, and the third is what makes the second
@@ -492,7 +649,10 @@ BUDGETS = {
     # the discipline along with the number, and these six lines are that
     # replacement (obs-0048).
     # 181 -> 184 for the fork-sync router row and its two-line inventory entry.
-    "instructions/index.md": 184,
+    # 184 -> 188 for doc-capture.md: a router row, a two-line inventory entry, and
+    # the scrape files joining the ledger and the wanted list in the written-to,
+    # never-loaded footnote.
+    "instructions/index.md": 188,
     # The one always-loaded file that is SUPPOSED to grow, because it grows by
     # learning something and shortens the checkpoint in exchange. 100 -> 165 when
     # it took on the base writing method and both nerdbrain blocks. The approvals
@@ -584,7 +744,12 @@ ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
 # 831 -> 877 for the fork-sync trigger in CLAUDE.md and its router row. The
 # procedure for reconciling a collision is deliberately not in this number: it
 # is a routed pack that loads only when a merge actually collides.
-ALWAYS_LOADED_BUDGET = 877
+#
+# 877 -> 889 for the capture queue, same trade and same shape: 12 lines paid by
+# every session so that a docs gap gets written where a crawler will find it and
+# a landed capture gets filed instead of accumulating receipts. The 72-line
+# protocol stayed in a routed pack.
+ALWAYS_LOADED_BUDGET = 889
 
 
 def check_always_loaded_total(errors):
@@ -693,6 +858,7 @@ def main():
                   check_index_lists_packs, check_index_lists_pdfs,
                   check_indexed_pdfs_exist, check_skill_triggers_on_platforms,
                   check_capture_folders_are_routed, check_line_budgets,
+                  check_scrape_queue,
                   check_always_loaded_total, check_wrap_width,
                   check_ledger_entries,
                   check_volatile_claims):
@@ -706,7 +872,8 @@ def main():
     print("ok - references resolve, no dated names or page cites outside the "
           "indexes, packs and snapshots indexed both directions, every capture "
           "folder routed, skill triggers cover all platforms, files inside "
-          "their line budgets, ledger entries parse, volatile claims dated")
+          "their line budgets, ledger entries parse, volatile claims dated, "
+          "scrape queue and receipts parse")
     return 0
 
 

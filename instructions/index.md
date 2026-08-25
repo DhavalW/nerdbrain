@@ -62,6 +62,7 @@ Context stays cheap through *what* is loaded, never through *how much*. Three ru
 | Speed, bundle size, SEO, accessibility, Lighthouse, infra cost | `optimization.md` |
 | Deploys, CI, envs, releases, going live, an open PR on the code you're touching | `shipping.md` |
 | Wrapping up a task, a correction, a preference said in passing, anything worth keeping | `learning.md` (writes to `../memory/observations.md`) |
+| Needing docs this repo doesn't have, or a capture waiting to be filed | `doc-capture.md` (writes to `../docs/scrape-list.md`) |
 | Adding, editing, promoting or retiring a rule *in this repo* | `meta-rules.md` |
 | A fork sync this repo can't merge on its own: `conflict` or `dirty-overlap` | `fork-sync.md` |
 
@@ -155,6 +156,8 @@ optimization.md             performance, SEO, a11y, cost
 shipping.md                 deploy, envs, CI, launch, keeping an open PR current
 learning.md                 capturing what a task taught, generalized; the approval gate,
                             and the secrets that never get recorded
+doc-capture.md              queueing a docs gap for a crawler, and filing the PDF that
+                            comes back
 fork-sync.md                reconciling this fork with the original when the merge collides:
                             the approaches and what each costs, then carrying out the answer
 meta-rules.md               how a rule gets made here: the bar it clears, provenance,
@@ -177,8 +180,9 @@ themes/_template.md                   capture format for proven themes
 platforms/_template.md                write one per platform you build on
 ../docs/index.md            router to the per-source doc indexes
 ../docs/wanted.md           docs a session needed and this repo didn't have
+../docs/scrape-list.md      URLs queued for capture; ../docs/scrape-done.md is the receipt
 ../memory/index.md          the ledger: entry format, lifecycle, what may be written
 ```
 
-The ledger and the wanted list are not packs and carry no router row — they are written to,
-not loaded. `learning.md` says when.
+The ledger, the wanted list and the two scrape files are not packs and carry no router
+row — they are written to, not loaded. `learning.md` and `doc-capture.md` say when.

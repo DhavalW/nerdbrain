@@ -119,7 +119,12 @@ ids to reply with, evidence attached — because an ask buried in prose gets ski
 credential configured, which is the default state of a fresh clone.
 
 Docs the task needed and this repo didn't have go in `docs/wanted.md`, same terms: no
-approval, because it's a worklist and not a rule.
+approval, because it's a worklist and not a rule. The half of that worklist a crawler can
+do unattended goes in `docs/scrape-list.md` instead — a start URL and the folder it belongs
+in, in the shape SiteToPDF reads out of GitHub and captures without being asked. Rows in
+`docs/scrape-done.md` are its receipts, and clearing them is a session-start job: verify
+the PDF landed and is indexed, then delete the pair, or leave both and say what failed.
+Both halves are in `instructions/doc-capture.md`.
 
 ## Sharing a learning upstream
 
@@ -309,6 +314,9 @@ protocol below applies whether or not you invoke it:
   filename, an entry and page map in that platform's index (drafted with
   `tools/index-pdf.py`), router row updated, old capture removed. Pushing the PDF to `main`
   and letting `index-captures` draft the entry does the same thing, one review later.
+- **A queued capture, or its receipt:** append a row to `docs/scrape-list.md`, or delete
+  the verified pair from it and `docs/scrape-done.md`, per `instructions/doc-capture.md`.
+  No approval and no router row — both files are worklists, not rules.
 - **A new ledger entry:** append it to `memory/observations.md` in the format
   `memory/index.md` sets out, at the end of the task. No approval, no router row, no
   inventory line — it isn't a pack. Seen it before? Bump the existing entry's count instead
