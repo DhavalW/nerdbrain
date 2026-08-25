@@ -353,11 +353,19 @@ flowchart LR
       UP["shared packs"]
     end
     YP -->|"you approve a PR,<br/>generalized, no evidence attached"| UP
-    UP -->|"git pull"| YP
+    UP -->|"checked before every task,<br/>merged never rebased"| YP
 
     classDef ask fill:#d2992222,stroke:#d29922
     class UP ask
 ```
+
+**The way down runs on its own.** Before any task the agent checks whether upstream `main`
+has moved and merges it in when the merge is clean, so your fork is never quietly holding
+work to packs the original has since corrected. Only upstream `main` is fetched, nothing is
+ever pushed back, and history is merged rather than rebased — no checkout you already have
+stops working. When both sides changed the same lines it stops and asks: each clashing file
+in plain language, the ways to reconcile it, what each one costs, and nothing committed until
+you choose. `instructions/fork-sync.md` has that half.
 
 **Ask before anything leaves the repo, every time.** A learning arrives attached to the work
 that produced it, and you are the only one who knows whether the generalized version still

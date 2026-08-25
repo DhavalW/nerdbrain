@@ -63,6 +63,7 @@ Context stays cheap through *what* is loaded, never through *how much*. Three ru
 | Deploys, CI, envs, releases, going live, an open PR on the code you're touching | `shipping.md` |
 | Wrapping up a task, a correction, a preference said in passing, anything worth keeping | `learning.md` (writes to `../memory/observations.md`) |
 | Adding, editing, promoting or retiring a rule *in this repo* | `meta-rules.md` |
+| A fork sync this repo can't merge on its own: `conflict` or `dirty-overlap` | `fork-sync.md` |
 
 ### Project-type packs
 
@@ -154,6 +155,8 @@ optimization.md             performance, SEO, a11y, cost
 shipping.md                 deploy, envs, CI, launch, keeping an open PR current
 learning.md                 capturing what a task taught, generalized; the approval gate,
                             and the secrets that never get recorded
+fork-sync.md                reconciling this fork with the original when the merge collides:
+                            the approaches and what each costs, then carrying out the answer
 meta-rules.md               how a rule gets made here: the bar it clears, provenance,
                             retirement. Loaded only when changing a rule, not when using one
 types/browser-extension.md

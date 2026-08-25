@@ -12,6 +12,50 @@ This repo turns up in a session in one of two roles, and they want opposite thin
 - **The work itself** — a change to a pack, the router, a doc snapshot, the skill, or the
   gate. Follow *Working on this repo* and everything below it.
 
+## Sync with the original before you start
+
+`DhavalW/nerdbrain` is the original. Every other copy of this repo is a fork, and a fork
+falls behind the moment the original moves — including the packs a reference session is
+about to hold work to. Nobody should have to notice that happening.
+
+**Before starting any task, in either role, bring the fork up to date with the original's
+`main`.** Session start counts as a start, and so does the beginning of each new task in a
+long session. Once per task is enough — don't re-check between turns, or straight after a
+sync you just ran.
+
+```
+tools/fork-sync.sh check
+```
+
+It reads and changes nothing. What it prints decides what happens next:
+
+| Verdict | Means | Do |
+|---|---|---|
+| `not-a-fork` | `origin` is the original | Nothing, and don't raise it again this session |
+| `in-sync` | The branch has every upstream commit | Start the task |
+| `behind:N` | N commits missing, merge is clean | `tools/fork-sync.sh sync`, report in a line, start |
+| `dirty-overlap` | Uncommitted edits on files upstream also changed | Load `instructions/fork-sync.md` |
+| `conflict` | The merge would collide | Load `instructions/fork-sync.md` |
+| `upstream-mismatch` | An `upstream` remote points elsewhere | Stop, ask which repo is the original |
+| `fetch-failed` | The original is unreachable | Say so in a line and start the task anyway |
+
+A completed sync is worth one line: how many commits arrived and what they touched. When
+nothing came down, say nothing.
+
+Four rules it never breaks, here rather than behind a pointer because a session that never
+follows one still has to obey them. Upstream `main` is the only thing fetched — no other
+branch, no tags. Nothing flows back up; *Sharing a learning upstream* below is the only path
+by which anything leaves this repo, and `fork-sync.sh` points the upstream remote's push URL
+at a dead scheme so a stray push fails loudly instead of succeeding. Merge, never rebase — a
+merge commit keeps both histories and leaves every existing checkout of the fork valid, which
+is also why `push --force`, `reset --hard` and amending a pushed commit are out. And
+uncommitted work is never merged over: the script stashes only when none of the dirty files
+are ones upstream touched, and refuses outright on any overlap.
+
+**A conflict is never resolved on your own judgement.** The fork's change is somebody's
+deliberate work and the original's is somebody else's. Load `instructions/fork-sync.md`: it
+carries how to put the choice to the user and how to carry out their answer.
+
 ## Reference mode
 
 Loading the right packs is your job, not the user's. They attached the repo instead of

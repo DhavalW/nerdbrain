@@ -59,7 +59,9 @@ hit. Long autonomous runs go further before they need you, and the ones that do 
 everything at once, at the start, instead of stalling four times.
 
 **It compounds across everyone.** A rule that would hold for anyone can go back upstream as
-a pull request. Your fork learns from your work; everyone's fork learns from everyone's.
+a pull request, and what comes the other way arrives on its own — your fork checks the
+original before each task and merges what is new. Your fork learns from your work;
+everyone's fork learns from everyone's.
 
 ---
 

@@ -7,6 +7,24 @@ reads them.
 
 This repo turns up in one of two roles.
 
+## Before any task, in either role: sync with the original
+
+`DhavalW/nerdbrain` is the original. If `origin` is anything else, this clone is a fork and
+may be missing upstream commits — including corrections to the very packs a reference
+session is about to hold work to.
+
+Run `tools/fork-sync.sh check` at session start and at the start of each new task. On
+`behind:N`, run `tools/fork-sync.sh sync` and carry on. On `fetch-failed`, say so in a line
+and start the task anyway. On `upstream-mismatch`, ask which repo is the original.
+
+On `conflict` or `dirty-overlap`, never resolve it on your own judgement — read
+`instructions/fork-sync.md` and follow it: `tools/fork-sync.sh plan` for both sides of every
+clash, put the choice to the user file by file in plain language with what each option costs,
+wait, then carry out their answer with `tools/fork-sync.sh resolve`.
+
+The sync is one-way and history-preserving: upstream `main` only, merge never rebase, no
+force-push, nothing pushed back to the original, and no merging over uncommitted work.
+
 ## As a reference, alongside the repo actually being worked on
 
 The usual case, and the whole instruction is: hold the work to what's in here. Change

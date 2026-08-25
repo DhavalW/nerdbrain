@@ -467,7 +467,21 @@ BUDGETS = {
     # changes kind, and show the report block only when it has news. All three are
     # reference-mode behavior, which is the half of this file that a session
     # working in another repo actually executes.
-    "CLAUDE.md": 297,
+    #
+    # 297 -> 341 for "Sync with the original before you start". A fork runs on
+    # whatever it cloned until somebody notices otherwise, and in reference mode
+    # that means holding work to packs the original has already corrected - the
+    # one failure this repo cannot detect from inside itself. The trigger, the
+    # verdict table and the four rules the sync never breaks sit here for the
+    # same reason the ask-first rule above does: a session that never follows a
+    # pointer still has to obey them.
+    #
+    # The conflict half is the honest seam and went to instructions/fork-sync.md
+    # instead: it fires only when a merge actually collides, so keeping it here
+    # would charge every session ~50 lines for the rare case. Don't fold it back
+    # in, and don't split the trigger out after it - a check nobody is told to
+    # run is a check that doesn't happen.
+    "CLAUDE.md": 341,
     "docs/index.md": 95,            # the doc router; keep it a router
     # The pack inventory; grows with the packs. 170 -> 175 for the loading
     # discipline rewrite: no count cap, route every iteration, read the delta.
@@ -477,7 +491,8 @@ BUDGETS = {
     # last-responsible-moment loading. Deleting a cap without a replacement removes
     # the discipline along with the number, and these six lines are that
     # replacement (obs-0048).
-    "instructions/index.md": 181,
+    # 181 -> 184 for the fork-sync router row and its two-line inventory entry.
+    "instructions/index.md": 184,
     # The one always-loaded file that is SUPPOSED to grow, because it grows by
     # learning something and shortens the checkpoint in exchange. 100 -> 165 when
     # it took on the base writing method and both nerdbrain blocks. The approvals
@@ -566,7 +581,10 @@ BUDGETS = {
 # which is a change to when its rules apply, and belongs at a checkpoint.
 ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
                  "instructions/profile.md")
-ALWAYS_LOADED_BUDGET = 831
+# 831 -> 877 for the fork-sync trigger in CLAUDE.md and its router row. The
+# procedure for reconciling a collision is deliberately not in this number: it
+# is a routed pack that loads only when a merge actually collides.
+ALWAYS_LOADED_BUDGET = 877
 
 
 def check_always_loaded_total(errors):
