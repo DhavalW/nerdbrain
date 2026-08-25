@@ -1,0 +1,13 @@
+name: consistency
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run repo consistency gate
+        run: python3 tools/check.py

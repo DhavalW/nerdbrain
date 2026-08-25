@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nerdbrain — a portable brain for your AI agents</title>
+<meta name="description" content="A pluggable, self-evolving brain for AI coding agents. It learns how you work, keeps your docs current, and travels with you between tools. Just a git repo you own.">
+<meta property="og:title" content="nerdbrain">
+<meta property="og:description" content="Your AI agent forgets everything between sessions. nerdbrain remembers — and gets better every time you use it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nerdbrain.midhrami.com">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d10; --bg-2:#101318; --bg-3:#151a21;
+    --ink:#eceef2; --ink-2:#a8b0bd; --ink-3:#6d7683;
+    --line:#1e242d; --line-2:#2a323d;
+    --acc:#7cc4ff; --acc-2:#a8e6a3; --acc-3:#ffc978;
+    --max:1120px;
+    --r:14px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#fbfbfa; --bg-2:#ffffff; --bg-3:#f3f4f2;
+      --ink:#14171c; --ink-2:#4d5560; --ink-3:#858d99;
+      --line:#e5e7e4; --line-2:#d5d9d4;
+      --acc:#1d6fd6; --acc-2:#2c7a4b; --acc-3:#9a6100;
+    }
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:17px; line-height:1.6; letter-spacing:-0.011em;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{line-height:1.12; letter-spacing:-0.03em; margin:0; font-weight:600}
+  p{margin:0}
+  a{color:inherit}
+  code,pre,.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 24px}
+  .serif{font-family:"Instrument Serif",Georgia,serif; font-weight:400; letter-spacing:-0.01em}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; gap:28px; height:62px}
+  .brand{display:flex; align-items:center; gap:9px; font-weight:600; letter-spacing:-0.02em; text-decoration:none}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+  nav .links{display:flex; gap:24px; margin-left:auto; align-items:center}
+  nav .links a{color:var(--ink-2); text-decoration:none; font-size:14.5px}
+  nav .links a:hover{color:var(--ink)}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    padding:10px 17px; border-radius:10px; font-size:14.5px; font-weight:550;
+    border:1px solid var(--line-2); background:var(--bg-3); color:var(--ink);
+    transition:.15s ease;
+  }
+  .btn:hover{border-color:var(--ink-3); transform:translateY(-1px)}
+  .btn.primary{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+  .btn.primary:hover{opacity:.88}
+  @media (max-width:720px){ nav .links a:not(.btn){display:none} }
+
+  /* ---------- hero ---------- */
+  header{position:relative; overflow:hidden; padding:96px 0 78px}
+  header::before{
+    content:""; position:absolute; inset:-40% 10% auto; height:620px;
+    background:radial-gradient(closest-side, color-mix(in srgb,var(--acc) 16%,transparent), transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px; font-size:13px; color:var(--ink-2);
+    border:1px solid var(--line-2); background:var(--bg-2); padding:6px 13px; border-radius:999px;
+    margin-bottom:26px;
+  }
+  .eyebrow .pip{width:6px;height:6px;border-radius:50%;background:var(--acc-2)}
+  h1{font-size:clamp(40px, 6.4vw, 74px); max-width:15ch}
+  h1 em{font-style:normal; color:var(--acc)}
+  .lede{margin-top:26px; font-size:clamp(18px,2.1vw,21px); color:var(--ink-2); max-width:56ch}
+  .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:36px; align-items:center}
+  .cta .note{font-size:13.5px; color:var(--ink-3)}
+  .term{
+    margin-top:44px; border:1px solid var(--line); border-radius:var(--r); overflow:hidden;
+    background:var(--bg-2); max-width:640px; box-shadow:0 24px 60px -30px rgba(0,0,0,.6);
+  }
+  .term .bar{display:flex; gap:7px; padding:12px 15px; border-bottom:1px solid var(--line); background:var(--bg-3)}
+  .term .bar i{width:10px;height:10px;border-radius:50%;background:var(--line-2);display:block}
+  .term pre{margin:0; padding:18px 20px; font-size:13.5px; line-height:1.75; overflow-x:auto}
+  .c-dim{color:var(--ink-3)} .c-ok{color:var(--acc-2)} .c-key{color:var(--acc)}
+
+  /* ---------- sections ---------- */
+  section{padding:82px 0; border-top:1px solid var(--line)}
+  .sec-head{max-width:62ch; margin-bottom:52px}
+  .kicker{font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin-bottom:16px; font-weight:600}
+  h2{font-size:clamp(28px,3.6vw,40px)}
+  .sec-head p{margin-top:18px; color:var(--ink-2); font-size:18px}
+
+  /* ---------- problem ---------- */
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+  @media (max-width:800px){.split{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line); border-radius:var(--r); padding:28px; background:var(--bg-2)}
+  .panel h3{font-size:19px; margin-bottom:14px; display:flex; align-items:center; gap:10px}
+  .panel ul{margin:0; padding-left:19px; color:var(--ink-2); font-size:15.5px}
+  .panel li{margin:9px 0}
+  .panel.bad{border-color:color-mix(in srgb,#da3633 30%,var(--line))}
+  .panel.good{border-color:color-mix(in srgb,var(--acc-2) 34%,var(--line))}
+  .tag{font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:6px}
+  .tag.bad{background:color-mix(in srgb,#da3633 18%,transparent); color:#ff9d9a}
+  .tag.good{background:color-mix(in srgb,var(--acc-2) 18%,transparent); color:var(--acc-2)}
+  @media (prefers-color-scheme: light){ .tag.bad{color:#a32320} }
+
+  /* ---------- benefits ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+  @media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{
+    border:1px solid var(--line); border-radius:var(--r); padding:30px 28px; background:var(--bg-2);
+    position:relative; transition:.18s ease;
+  }
+  .card:hover{border-color:var(--line-2); transform:translateY(-2px)}
+  .card .n{font-size:12px; color:var(--ink-3); font-weight:600; letter-spacing:.08em}
+  .card h3{font-size:20px; margin:14px 0 12px}
+  .card p{color:var(--ink-2); font-size:15.5px}
+  .card.feature{grid-column:span 2}
+  @media (max-width:640px){.card.feature{grid-column:span 1}}
+  .card.feature h3{font-size:24px}
+  .card .rule{height:2px; width:34px; background:var(--acc); border-radius:2px; margin-bottom:20px}
+  .card:nth-child(2) .rule{background:var(--acc-2)}
+  .card:nth-child(3) .rule{background:var(--acc-3)}
+  .card:nth-child(5) .rule{background:var(--acc-2)}
+  .card:nth-child(6) .rule{background:var(--acc-3)}
+
+  /* ---------- flow ---------- */
+  .flow{display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-top:8px}
+  @media (max-width:860px){.flow{grid-template-columns:1fr; gap:14px}}
+  .step{padding:26px 22px; border:1px solid var(--line); background:var(--bg-2); position:relative}
+  .step:first-child{border-radius:var(--r) 0 0 var(--r)}
+  .step:last-child{border-radius:0 var(--r) var(--r) 0}
+  .step + .step{border-left:none}
+  @media (max-width:860px){
+    .step,.step:first-child,.step:last-child{border-radius:var(--r); border-left:1px solid var(--line)}
+  }
+  .step .i{font-size:11.5px; font-weight:700; color:var(--ink-3); letter-spacing:.1em}
+  .step h4{margin:12px 0 8px; font-size:16px; font-weight:600; letter-spacing:-0.02em}
+  .step p{font-size:14px; color:var(--ink-2); line-height:1.55}
+  .step.gate{background:color-mix(in srgb,var(--acc-3) 9%,var(--bg-2))}
+  .step.gate .i{color:var(--acc-3)}
+
+  /* ---------- mechanics table ---------- */
+  .tbl{width:100%; border-collapse:collapse; font-size:15.5px}
+  .tbl th{text-align:left; padding:14px 16px; color:var(--ink-3); font-size:12.5px; letter-spacing:.09em; text-transform:uppercase; border-bottom:1px solid var(--line)}
+  .tbl td{padding:18px 16px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-2)}
+  .tbl td:first-child{color:var(--ink); font-weight:550; white-space:nowrap}
+  .tbl-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r); background:var(--bg-2)}
+
+  /* ---------- quote ---------- */
+  .quote{border-left:3px solid var(--acc); padding:6px 0 6px 26px; max-width:62ch; margin:0 auto}
+  .quote p{font-size:clamp(21px,2.6vw,27px); line-height:1.4}
+  .quote .who{margin-top:16px; font-size:14px; color:var(--ink-3)}
+
+  /* ---------- final ---------- */
+  .final{text-align:center; padding:104px 0}
+  .final h2{max-width:18ch; margin:0 auto}
+  .final p{margin:22px auto 0; color:var(--ink-2); max-width:54ch}
+  .final .cta{justify-content:center}
+  footer{border-top:1px solid var(--line); padding:38px 0; color:var(--ink-3); font-size:14px}
+  footer .wrap{display:flex; gap:20px; flex-wrap:wrap; align-items:center}
+  footer a{color:var(--ink-2); text-decoration:none; margin-right:18px}
+  footer a:hover{color:var(--ink)}
+  .ml-auto{margin-left:auto}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="dot"></span> nerdbrain</a>
+    <div class="links">
+      <a href="#why">Why</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#how">How it works</a>
+      <a href="#start">Get started</a>
+      <a class="btn primary" href="https://github.com/dhavalw/nerdbrain">GitHub →</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow"><span class="pip"></span> Open source · MIT · works with Claude Code today</span>
+    <h1>Your AI agent forgets everything. <em>This one remembers.</em></h1>
+    <p class="lede">
+      nerdbrain is a pluggable brain you attach to any AI coding session. It learns how you
+      work, keeps the documentation your work depends on close at hand, and travels with you
+      between tools — because it's just a git repo you own.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="#start">Get started</a>
+      <a class="btn" href="https://github.com/dhavalw/nerdbrain">Read the source</a>
+      <span class="note">No service. No account. Nothing to sign up for.</span>
+    </div>
+
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="c-dim">$</span> git clone https://github.com/dhavalw/nerdbrain.git ~/.nerdbrain
+<span class="c-dim">$</span> ~/.nerdbrain/install.sh
+
+<span class="c-dim"># then, in any project</span>
+<span class="c-key">/nerdbrain</span>
+
+  <span class="c-dim">─── nerdbrain ─────────────────────────────</span>
+  packs     core planning security ux-user   <span class="c-ok">(4 loaded)</span>
+  ledger    obs-0016 new · obs-0004 bumped to 2×
+  <span class="c-dim">───────────────────────────────────────────</span></pre>
+    </div>
+  </div>
+</header>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">The problem</div>
+      <h2>You've explained yourself to an AI a hundred times.</h2>
+      <p>
+        Every session starts from zero. You correct the same things, restate the same
+        preferences, and watch it confidently use an API that changed after its training
+        cutoff. The usual fix — one enormous instructions file — fails quietly: past a
+        certain length it gets partly ignored, so you stop adding to it, so it stops
+        describing how you actually work.
+      </p>
+    </div>
+
+    <div class="split">
+      <div class="panel bad">
+        <h3><span class="tag bad">Without</span></h3>
+        <ul>
+          <li>The same correction, every week, in every project.</li>
+          <li>A 900-line <code>CLAUDE.md</code> the agent reads selectively.</li>
+          <li>Invented method names, from docs that changed last quarter.</li>
+          <li>Four interruptions mid-build, none of them at a good moment.</li>
+          <li>Everything you taught it locked inside one vendor's tool.</li>
+        </ul>
+      </div>
+      <div class="panel good">
+        <h3><span class="tag good">With nerdbrain</span></h3>
+        <ul>
+          <li>A correction becomes a rule, and the rule outlives the session.</li>
+          <li>Only the small packs the task actually needs load — every one of them, and nothing else.</li>
+          <li>Real docs, indexed by topic, read six pages at a time.</li>
+          <li>Every question asked once, up front, before the work starts.</li>
+          <li>A git repo you own, that any agent can read.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">What you get</div>
+      <h2>It gets better every time you use it.</h2>
+      <p>Ordered by what changes your day the most.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card feature">
+        <div class="rule"></div>
+        <div class="n">01</div>
+        <h3>You stop writing instructions. It learns them.</h3>
+        <p>
+          A correction you make today, a preference said in passing, an approach that held
+          under pressure — a session notices it, generalizes it past the project, and writes
+          it down. You say yes once, and it applies in every project after that. The
+          instructions file writes itself out of your ordinary work.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="rule"></div>
+        <div class="n">02</div>
+        <h3>No lock-in, ever</h3>
+        <p>
+          It's markdown in a git repo. Any agent that can read a repository can use it.
+          Switch harnesses, switch models, switch jobs — the brain comes with you.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="rule"></div>
+        <div class="n">03</div>
+        <h3>Fewer errors from stale training data</h3>
+        <p>
+          The docs your work depends on live in the repo as indexed snapshots, mapped
+          topic-to-page. The agent reads the actual reference instead of recalling an API
+          that changed after its cutoff.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="rule"></div>
+        <div class="n">04</div>
+        <h3>Fewer questions, asked at better times</h3>
+        <p>
+          Everything the brain already knows arrives at the decision point pre-filled. What
+          is left gets asked once, in one batch, before building starts — never as a
+          pop-up four hours in.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="rule"></div>
+        <div class="n">05</div>
+        <h3>Private, because it's yours</h3>
+        <p>
+          Your preferences, your context, your captured documentation — in your own
+          repository, public or private as you choose. Nothing is uploaded anywhere to make
+          this work.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="rule"></div>
+        <div class="n">06</div>
+        <h3>Runs longer without you</h3>
+        <p>
+          The rules that survive are the ones that prevent failures you already hit. Long
+          autonomous runs go further before they need a human, and stop cleanly when they do.
+        </p>
+      </div>
+
+      <div class="card feature">
+        <div class="rule"></div>
+        <div class="n">07</div>
+        <h3>Everyone's brain gets smarter than yours alone</h3>
+        <p>
+          A rule that would hold for anyone goes back upstream as a pull request — reviewed,
+          generalized, stripped of the evidence that produced it. Your fork learns from your
+          work; every fork learns from everyone's. That is the part a private instructions
+          file can never do.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">How it works</div>
+      <h2>Notice, record, approve, apply.</h2>
+      <p>
+        The design turns on one separation: <strong>recording a lesson and giving it
+        authority are two different acts.</strong> Recording is free, so nothing is ever
+        lost. Authority needs your explicit yes, per item — so nothing governs your work
+        without you.
+      </p>
+    </div>
+
+    <div class="flow">
+      <div class="step">
+        <div class="i">01</div>
+        <h4>Route</h4>
+        <p>A router maps the task to the two-to-four packs it needs. The other thirty stay out of context.</p>
+      </div>
+      <div class="step">
+        <div class="i">02</div>
+        <h4>Work</h4>
+        <p>The agent follows those packs, with your word always beating any of them.</p>
+      </div>
+      <div class="step">
+        <div class="i">03</div>
+        <h4>Notice</h4>
+        <p>What the task taught goes to the ledger, with what it rests on. No permission needed — an entry governs nothing.</p>
+      </div>
+      <div class="step gate">
+        <div class="i">04 · YOUR CALL</div>
+        <h4>Approve</h4>
+        <p>Merge a pull request, or name an item's id in chat. Silence is never a yes.</p>
+      </div>
+      <div class="step">
+        <div class="i">05</div>
+        <h4>Apply</h4>
+        <p>It's a rule now — loaded on exactly the tasks it fits, forever.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:56px" class="tbl-scroll">
+      <table class="tbl">
+        <thead>
+          <tr><th>Mechanism</th><th>What it does</th><th>The failure it prevents</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The router</td>
+            <td>Maps task shape to a handful of small packs, and re-routes when the work turns.</td>
+            <td>One long instructions file that gets partly ignored.</td>
+          </tr>
+          <tr>
+            <td>The ledger</td>
+            <td>Records observations with their evidence — seen once, seen three times, or stated outright.</td>
+            <td>A lesson dying with the session that noticed it.</td>
+          </tr>
+          <tr>
+            <td>The approval gate</td>
+            <td>Nothing becomes a rule without an explicit yes, per item, through a channel that works while you're away.</td>
+            <td>An agent quietly rewriting how it works on you.</td>
+          </tr>
+          <tr>
+            <td>The doc index</td>
+            <td>Maps every topic in your PDFs to a page range, so the agent reads six pages instead of guessing.</td>
+            <td>Invented APIs and quoted limits that went stale.</td>
+          </tr>
+          <tr>
+            <td>The consistency gate</td>
+            <td>CI check: references resolve, packs are routed, ledger entries parse, always-loaded files stay small.</td>
+            <td>A brain that rots silently as it grows.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="quote">
+      <p class="serif">
+        An entry in the ledger governs nothing. That is exactly why writing one needs no
+        permission — and why promoting one into a rule still needs your yes.
+      </p>
+      <div class="who">— <span class="mono">memory/index.md</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="docs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Your documentation</div>
+      <h2>Bring the docs your work actually depends on.</h2>
+      <p>
+        Vendor APIs, platform guides, contracts, regulations, internal specs. Drop a PDF into
+        <code>docs/references/</code> and push — a workflow drafts its page map and opens a
+        pull request. From then on the agent reads the reference instead of recalling one.
+      </p>
+    </div>
+    <div class="split">
+      <div class="panel">
+        <h3>Any PDF with selectable text</h3>
+        <ul>
+          <li>An export, a spec, a scan that has been through OCR.</li>
+          <li>Indexed topic-to-page, so a lookup costs six pages, not six hundred.</li>
+          <li>Packs cite topics by <em>name</em>, so a refresh that renumbers every page breaks nothing.</li>
+          <li>Prices and limits are stored as pointers with a verify-by date, never as copied numbers.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Docs that only exist as a website</h3>
+        <ul>
+          <li><strong>SiteToPDF</strong> is the companion tool: it turns a documentation site into the dated, multi-part PDFs this index is shaped around.</li>
+          <li>Nothing here requires it — the filename convention is the only contract.</li>
+          <li>A gap a session hits gets written to a worklist the moment it's noticed.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Get started</div>
+      <h2>Four minutes, then forget about it.</h2>
+      <p>That last part is the goal. The repo does its work whether or not you think about it.</p>
+    </div>
+    <div class="flow">
+      <div class="step">
+        <div class="i">01</div>
+        <h4>Fork it</h4>
+        <p>The brain fills up with your preferences, so it should be your repository.</p>
+      </div>
+      <div class="step">
+        <div class="i">02</div>
+        <h4>Clone &amp; install</h4>
+        <p><code class="mono">install.sh</code> symlinks the skills into Claude Code. <code class="mono">git pull</code> updates them.</p>
+      </div>
+      <div class="step">
+        <div class="i">03</div>
+        <h4>Attach it</h4>
+        <p>Add the repo to a session beside the one you're working in — or type <code class="mono">/nerdbrain</code>.</p>
+      </div>
+      <div class="step">
+        <div class="i">04</div>
+        <h4>Just work</h4>
+        <p>It notices, records, and asks. Say yes to what's right, ignore the rest.</p>
+      </div>
+      <div class="step">
+        <div class="i">05</div>
+        <h4>Send it home</h4>
+        <p>Rules that would help anyone go back upstream as a pull request.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Stop teaching your AI the same thing twice.</h2>
+    <p>
+      Free and MIT-licensed. No service to depend on, no account to create, and nothing
+      that stops working if this project ever does — it is a folder of markdown you own.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/dhavalw/nerdbrain">Get nerdbrain on GitHub</a>
+      <a class="btn" href="https://github.com/dhavalw/nerdbrain/blob/main/MECHANICS.md">How it works, in detail</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="dot"></span> nerdbrain</span>
+    <span>MIT licensed</span>
+    <span class="ml-auto">
+      <a href="https://github.com/dhavalw/nerdbrain">GitHub</a>
+      <a href="https://github.com/dhavalw/nerdbrain/blob/main/CONTRIBUTING.md">Contributing</a>
+      <a href="https://github.com/dhavalw/nerdbrain/blob/main/MECHANICS.md">Mechanics</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
