@@ -3,7 +3,10 @@
 # Keep a fork of DhavalW/nerdbrain current with the original's main branch.
 #
 #   tools/fork-sync.sh check    read-only: what state is this clone in?
-#   tools/fork-sync.sh sync     bring upstream main into the current branch
+#   tools/fork-sync.sh sync     bring upstream main in, when the merge is clean
+#   tools/fork-sync.sh plan     read-only: both sides of every clash, to explain to a person
+#   tools/fork-sync.sh resolve FILE=upstream|fork|manual ...   carry out a chosen resolution
+#   tools/fork-sync.sh resolve --continue | --abort
 #
 # Exit 0 = nothing needed, or the sync succeeded.
 # Exit 1 = the user has to decide something. Stop and ask.
@@ -41,6 +44,76 @@ BRANCH="$(git symbolic-ref --quiet --short HEAD)" || {
 
 ORIGIN="$(git config --get remote.origin.url || true)"
 [ -n "$ORIGIN" ] || { verdict error; say "no origin remote"; exit 2; }
+
+
+CHOICES="$(git rev-parse --git-dir)/fork-sync-choices"
+
+# During a merge, git's "ours" is this fork and "theirs" is the original. Nobody remembers
+# which way round that goes, so the choices are spelled fork= and upstream= instead.
+take_side() { # take_side <path> <HEAD|MERGE_HEAD>
+  local path="$1" src="$2"
+  if git cat-file -e "$src:$path" 2>/dev/null; then
+    mkdir -p "$(dirname "$path")"
+    git show "$src:$path" > "$path" || return 1
+    git add -- "$path"
+  else
+    git rm -q --force --ignore-unmatch -- "$path"   # that side deleted it
+  fi
+}
+
+finish_merge() {
+  local unresolved marked
+  unresolved="$(git diff --name-only --diff-filter=U)"
+  if [ -n "$unresolved" ]; then
+    verdict unresolved
+    say "Still conflicted, so nothing was committed:"
+    printf '%s\n' "$unresolved" | indent
+    say "Edit them, 'git add' each one, then: tools/fork-sync.sh resolve --continue"
+    exit 1
+  fi
+  marked="$(git grep -l --cached -e '^<<<<<<< ' -e '^>>>>>>> ' 2>/dev/null)"
+  if [ -n "$marked" ]; then
+    verdict unresolved
+    say "Conflict markers are still in the staged copy of:"
+    printf '%s\n' "$marked" | indent
+    say "A hand-merge is not finished until the markers are gone. Nothing was committed."
+    exit 1
+  fi
+  local decided=""
+  [ -f "$CHOICES" ] && decided="$(tr '\n' ' ' < "$CHOICES")"
+  git commit -q --no-edit -m "Merge upstream main into $BRANCH" \
+    ${decided:+-m "Resolved: $decided"} || {
+      verdict error; say "merge commit failed"; exit 2; }
+  rm -f "$CHOICES"
+  say "merge committed${decided:+ — resolved: $decided}"
+  if [ "$BRANCH" != "main" ] && git show-ref --verify --quiet refs/heads/main; then
+    if git fetch . "$UPSTREAM_REF:refs/heads/main" >/dev/null 2>&1; then
+      say "fast-forwarded local main to upstream main"
+    else
+      say "local main carries its own commits; left untouched"
+    fi
+  fi
+  verdict synced
+  exit 0
+}
+
+# --continue and --abort run mid-merge: no fetch, no recomputing anything.
+if [ "${1:-}" = "resolve" ]; then
+  case "${2:-}" in
+    --continue)
+      git rev-parse --verify -q MERGE_HEAD >/dev/null || {
+        verdict error; say "no merge in progress"; exit 2; }
+      finish_merge
+      ;;
+    --abort)
+      git merge --abort 2>/dev/null
+      rm -f "$CHOICES"
+      verdict aborted
+      say "merge abandoned, working tree back where it started"
+      exit 0
+      ;;
+  esac
+fi
 
 if [ "$(normalize "$ORIGIN")" = "$(normalize "$UPSTREAM_URL")" ]; then
   verdict not-a-fork
@@ -166,7 +239,91 @@ case "${1:-check}" in
     exit 0
     ;;
 
+  # Read-only: the evidence needed to explain the clash to a person.
+  plan)
+    if [ "$MT_RC" -eq 0 ] && [ -z "$OVERLAP" ]; then
+      verdict behind:"$BEHIND"
+      say "Nothing to reconcile — this merge is clean. Run: tools/fork-sync.sh sync"
+      exit 0
+    fi
+    BASE="$(git merge-base HEAD "$UPSTREAM_REF")"
+    verdict plan
+    incoming_commits
+    OLD_IFS="$IFS"; IFS=$'\n'
+    for f in $CONFLICTS $OVERLAP; do
+      say ""
+      say "=== $f ==="
+      say ""
+      say "  the original changed it in:"
+      git log --oneline --no-decorate "$BASE..$UPSTREAM_REF" -- "$f" | sed 's/^/    /'
+      git diff --stat "$BASE" "$UPSTREAM_REF" -- "$f" | sed 's/^/    /'
+      say ""
+      say "  this fork changed it in:"
+      git log --oneline --no-decorate "$BASE..HEAD" -- "$f" | sed 's/^/    /'
+      git diff --stat "$BASE" HEAD -- "$f" | sed 's/^/    /'
+      say ""
+      say "  --- what the original did ---"
+      git diff "$BASE" "$UPSTREAM_REF" -- "$f" | tail -n +5 | head -60 | indent
+      say "  --- what this fork did ---"
+      git diff "$BASE" HEAD -- "$f" | tail -n +5 | head -60 | indent
+    done
+    IFS="$OLD_IFS"
+    say ""
+    say "Diffs are capped at 60 lines each; use git diff $BASE..$UPSTREAM_REF -- <file> for the rest."
+    exit 0
+    ;;
+
+  # Carry out a resolution the user chose: resolve FILE=upstream FILE=fork FILE=manual
+  resolve)
+    shift
+    [ $# -gt 0 ] || { verdict error; say "usage: resolve FILE=upstream|fork|manual ..."; exit 2; }
+    if [ -n "$(git status --porcelain)" ] && ! git rev-parse --verify -q MERGE_HEAD >/dev/null; then
+      verdict error
+      say "Working tree is not clean. Commit or stash before resolving — a hand-merge on top"
+      say "of uncommitted edits is the case this script exists to avoid."
+      exit 2
+    fi
+
+    if ! git rev-parse --verify -q MERGE_HEAD >/dev/null; then
+      git merge --no-ff --no-commit "$UPSTREAM_REF" >/dev/null 2>&1
+    fi
+
+    UNMERGED="$(git diff --name-only --diff-filter=U)"
+    : > "$CHOICES"
+    for arg in "$@"; do
+      f="${arg%%=*}"; side="${arg#*=}"
+      case "$side" in
+        upstream) take_side "$f" MERGE_HEAD || { verdict error; say "could not take upstream $f"; exit 2; }; say "$f <- the original" ;;
+        fork)     take_side "$f" HEAD       || { verdict error; say "could not keep fork $f";     exit 2; }; say "$f <- this fork" ;;
+        manual)   say "$f <- left for a hand-merge" ;;
+        *) verdict error; say "unknown choice '$side' for $f — use upstream, fork or manual"; exit 2 ;;
+      esac
+      printf '%s=%s\n' "$f" "$side" >> "$CHOICES"
+    done
+
+    # Every conflicted file needs a decision. Silence is not one.
+    MISSING=""
+    OLD_IFS="$IFS"; IFS=$'\n'
+    for f in $UNMERGED; do
+      grep -qF "$f=" "$CHOICES" || MISSING="$MISSING$f"$'\n'
+    done
+    IFS="$OLD_IFS"
+    if [ -n "$MISSING" ]; then
+      verdict undecided
+      say "These are conflicted and were not given a choice, so nothing was committed:"
+      printf '%s' "$MISSING" | indent
+      say "Re-run with a choice for each, or: tools/fork-sync.sh resolve --abort"
+      exit 1
+    fi
+
+    finish_merge
+    ;;
+
+
   *)
-    verdict error; say "usage: tools/fork-sync.sh [check|sync]"; exit 2
+    verdict error
+    say "usage: tools/fork-sync.sh check | sync | plan"
+    say "       tools/fork-sync.sh resolve FILE=upstream|fork|manual ... | --continue | --abort"
+    exit 2
     ;;
 esac
