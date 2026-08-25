@@ -288,3 +288,19 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-21)
 - **Target:** `../instructions/index.md`
 - **Status:** shipped
+
+### obs-0049 — 2026-08-25
+- **Observation:** Re-read remote state immediately before asserting anything about it — a
+  fetch from earlier in the session is a snapshot, and reporting a branch, a pull request or
+  a CI result from one states as fact something that may have changed hours ago.
+- **Rests on:** seen once (2026-08-25)
+- **Target:** `../instructions/shipping.md`
+- **Status:** open
+
+### obs-0050 — 2026-08-25
+- **Observation:** Before starting an integration, check whether someone else has already
+  done it — parallel sessions on one repository can each land the same merge, and the second
+  one is wasted work that looks like progress until the duplicate is found.
+- **Rests on:** seen once (2026-08-25)
+- **Target:** `../instructions/planning.md`
+- **Status:** open
