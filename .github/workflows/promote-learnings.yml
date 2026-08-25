@@ -1,0 +1,128 @@
+name: promote-learnings
+
+# The weekly pass that turns the ledger into something approvable.
+#
+# Sessions write observations to memory/observations.md as they happen; nothing
+# there governs anything until it has been promoted into a pack and approved.
+# This job does the promoting and puts it up as a PR - merging is the yes,
+# closing is the no, and dropping a commit declines just that one.
+#
+# It is the only scheduled model run in this repo, and it is why approvals work
+# while nobody is at the keyboard. It never merges its own PR, never pushes to
+# main, and never edits tools/check.py to get a green build.
+#
+# Needs one of ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN in repository
+# secrets. Without either, the job reports that and exits clean.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Mondays, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: promote-learnings
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # fetch-depth 0 is needed to reconcile against merged and closed PRs.
+          # blob:none matters here: without it, full history means every past
+          # version of every capture, and the captures are most of this repo.
+          # The tip's PDFs still get fetched - tools/check.py verifies they
+          # exist on disk, so they have to be there.
+          filter: blob:none
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Check for credentials
+        id: creds
+        env:
+          API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -n "${API_KEY}" ] || [ -n "${OAUTH_TOKEN}" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN set - skipping."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Promote what the ledger has earned
+        if: steps.creds.outputs.ok == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are running unattended on a weekly schedule in this repository.
+            Read CLAUDE.md first - it governs work on this repo, and it applies to
+            you exactly as it applies to an interactive session.
+
+            Your job is to turn accumulated observations into proposals the user
+            can approve by merging. You never merge anything yourself, you never
+            push to main, and no rule changes except through a pull request.
+
+            1. RECONCILE THE LAST RUN. Find pull requests whose title starts with
+               "ledger:" that are CLOSED and NOT MERGED. For every
+               memory/observations.md entry those PRs carried, set Status to
+               `declined`. A closed PR is a no, and recording it is what stops the
+               same proposal returning next week. If a MERGED "ledger:" PR left an
+               entry still at `proposed`, set it to `shipped`.
+
+            2. READ memory/index.md, then memory/observations.md. Take the entries
+               at Status `open` whose "Rests on" field says `stated outright`, or
+               `seen N times` with N of 2 or more. Leave `seen once` entries alone:
+               they stay open and keep collecting evidence. That threshold is the
+               whole reason the ledger records evidence at all - do not lower it
+               because a week looks quiet.
+
+            3. FOR EACH ENTRY YOU TAKE, make the pack edit by following
+               skill/update-nerdbrain/SKILL.md exactly:
+               placement, house style (instructions/copy.md and
+               instructions/anti-ai-tells.md), and the derived-content rebuild.
+               One commit per observation, so the user can drop them individually.
+               Set that entry's Status to `proposed` in the same commit. Leave a
+               `Last raised` field alone if the entry has one - that records a
+               session having put it to the user in conversation, and it is not
+               yours to clear.
+
+            4. RUN `python3 tools/check.py` and fix what each failure names until
+               it passes. Never edit the checker to get green and never raise a
+               budget just to clear a red build. If a failure looks wrong, leave
+               that observation unpromoted and say so in the PR body.
+
+            5. RUN `python3 tools/staleness.py` and include its output in the PR
+               body under a "Freshness" heading.
+
+            6. OPEN ONE PULL REQUEST against main, titled
+               "ledger: N proposal(s) for review". The body says, per commit, what
+               rule is being added, which pack it lands in, and what evidence it
+               rests on. State plainly that merging approves, closing declines, and
+               dropping a commit declines just that one. End the body with:
+
+               ---
+               _Generated by [Claude Code](https://claude.ai/code)_
+
+            If step 2 finds nothing to promote, do not open a pull request. If the
+            freshness report has anything overdue, open an issue titled
+            "freshness: <today's date>" carrying that report instead - but first
+            check for an open issue whose title starts with "freshness:" and add a
+            comment to that one rather than opening a second.
+
+            Never write a secret into this repository, in any file, in any commit
+            message, or in a PR body. instructions/learning.md has the full rule and
+            it is absolute.
