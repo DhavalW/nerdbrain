@@ -23,6 +23,7 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-12)
 - **Target:** `../instructions/learning.md`
 - **Status:** open
+- **Last raised:** 2026-08-26
 
 ### obs-0011 — 2026-08-13
 - **Observation:** In any repo the user's future work depends on, treat a change to its
@@ -31,6 +32,7 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-13)
 - **Target:** `../instructions/planning.md`
 - **Status:** open
+- **Last raised:** 2026-08-26
 
 ### obs-0008 — 2026-08-13
 - **Observation:** Exempt the guaranteed-read entry point from the modularity standard that
@@ -55,6 +57,7 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-13)
 - **Target:** `../instructions/engineering.md`
 - **Status:** open
+- **Last raised:** 2026-08-26
 
 ### obs-0006 — 2026-08-12
 - **Observation:** An efficiency claim written into a comment is a factual claim — verify
@@ -303,4 +306,29 @@ starting state, not a broken one.
   one is wasted work that looks like progress until the duplicate is found.
 - **Rests on:** seen once (2026-08-25)
 - **Target:** `../instructions/planning.md`
+- **Status:** open
+
+### obs-0051 — 2026-08-26
+- **Observation:** When two programs hand work to each other through a file, put the format
+  check in whichever one can fail a build over it — the consumer can only ever skip what it
+  cannot parse, so a malformed row there is a job that silently never happens.
+- **Rests on:** seen once (2026-08-26)
+- **Target:** `../instructions/engineering.md`
+- **Status:** open
+
+### obs-0052 — 2026-08-26
+- **Observation:** When one side does work and another verifies it, make the request and its
+  receipt a pair that is deleted together, and make either surviving alone an error: a
+  request outliving its receipt retries forever, and a receipt outliving its request is a
+  reconcile that stopped halfway and looks from outside like work still pending.
+- **Rests on:** seen once (2026-08-26)
+- **Target:** `../instructions/engineering.md`
+- **Status:** open
+
+### obs-0053 — 2026-08-26
+- **Observation:** Whether an automated action needs approval is decided by who can write
+  its input, not by how convenient the automation would be — an instruction arriving through
+  a file that anything with write access can change gets a yes each time, however routine.
+- **Rests on:** seen once (2026-08-26)
+- **Target:** `../instructions/security.md`
 - **Status:** open
