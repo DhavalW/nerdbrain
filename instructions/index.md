@@ -179,7 +179,7 @@ themes/bold-editorial.md              scale contrast as the statement
 themes/_template.md                   capture format for proven themes
 platforms/_template.md                write one per platform you build on
 ../docs/index.md            router to the per-source doc indexes
-../docs/wanted.md           docs a session needed and this repo didn't have
+../docs/wanted.md           docs a session needed that no crawler can fetch
 ../docs/scrape-list.md      URLs queued for capture; ../docs/scrape-done.md is the receipt
 ../memory/index.md          the ledger: entry format, lifecycle, what may be written
 ```

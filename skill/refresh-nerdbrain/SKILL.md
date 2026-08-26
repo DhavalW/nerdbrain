@@ -6,9 +6,10 @@ description: Rebuild this repo's derived content after files change — page map
 # refresh-nerdbrain
 
 Parts of this repo are derived from other parts. Drop a PDF into `docs/` and its platform's
-file list and page maps are stale. Add a pack and the router and inventory are stale. Add a
-platform and the `/nerdbrain` skill stops triggering on its name. This skill walks the drift,
-rebuilds it, and leaves the gate green.
+file list and page maps are stale — and one that arrived through the capture queue leaves a
+receipt in `docs/scrape-done.md` saying as much. Add a pack and the router and inventory are
+stale. Add a platform and the `/nerdbrain` skill stops triggering on its name. This skill
+walks the drift, rebuilds it, and leaves the gate green.
 
 `tools/check.py` finds most of it and names the fix in every failure message. The rest of
 this file is the part the gate can't see.
@@ -57,6 +58,7 @@ A commit that touched a PDF without touching its map, or a pack without touching
 | Pack over its line budget | Split it at the seam between two load triggers, verbatim, and route each half — never trim to fit. No seam means leave it; two halves that always load together cost more than the one file did |
 | New skill under `skill/` | A symlink under `.claude/skills/` so it's live when the repo is attached, and the skill's line in the `README.md` layout block. `install.sh` finds anything with a `SKILL.md` on its own |
 | Unindexed PDF sitting under `docs/references/` | `python3 tools/autoindex.py` drafts the `## Files` rows and page maps. Then do the human half: merge over-split rows, rename topics to match the document, delete the `draft map, unreviewed` headings |
+| Rows in `docs/scrape-done.md` | A capture tool committed a PDF and is waiting to be checked. Index it as above, then delete the receipt **and** the `docs/scrape-list.md` row it answers, together. Any of the five checks in `instructions/doc-capture.md` failing means both rows stay and the reply says which |
 | A pack gained a claim about a limit, price or free tier | A line in that pack's `## Volatile claims` section — a pointer to the live source with a verify-by month, never a copied value. The gate rejects an undated one |
 | A ledger entry was promoted into a pack | Flip that entry's Status to `shipped` in the same commit as the pack edit, so the ledger and the packs never disagree about what is already a rule |
 | A profile line stopped being true | Remove it from `instructions/profile.md` and say so. Nothing auto-expires there, and a wrong profile line is worse than a missing one — it gets used to pre-fill an answer nobody checked |

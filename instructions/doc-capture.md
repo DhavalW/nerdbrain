@@ -47,7 +47,9 @@ For each row, all five have to hold:
    there are roughly as many as `Pages` claims.
 4. **The folder's `index.md` lists it** in `## Files` and maps its topics to page ranges.
    Missing? That is the reconcile's work, not a reason to fail the row — draft the map with
-   `../tools/index-pdf.py` and write the entry.
+   `../tools/index-pdf.py` and write the entry. Look for an open pull request first: a
+   capture committed to `main` fires the `index-captures` workflow, which drafts exactly
+   this and puts it up for review, so the work may already be waiting to be merged.
 5. **`../docs/index.md` routes to that index**, and `python3 tools/check.py` is green.
 
 **All five: delete both rows** — the one in `../docs/scrape-done.md` and the one in
