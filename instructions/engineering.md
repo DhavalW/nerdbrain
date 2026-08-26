@@ -53,6 +53,18 @@ Your preferences lose to the project's conventions.
   weird-looking line, the link to the issue.
 - No comment restating the function signature. No banner headings for two-line files.
 
+## A guard covers a route, not an outcome
+
+Building something to prevent an outcome is not the same as preventing it. List the routes
+to that outcome and say which one the guard actually reaches; whatever is left over is not
+covered by the guard existing, and needs a rule in words instead. Write that rule as an
+instruction to whoever must obey it — "never do X" — never as a description of what the
+guard does, because a description binds nobody on the paths the guard does not run
+(obs-0055).
+
+Do this while shipping the guard, not later. A gap in coverage is invisible from inside the
+part that works, so it surfaces when somebody thinks to ask — and mostly nobody does.
+
 ## Testing
 
 Full rules in `testing.md` — load it whenever code changes. The short version: tests ship

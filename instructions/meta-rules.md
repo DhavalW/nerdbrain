@@ -7,7 +7,7 @@ The packs govern the work. This governs the packs. `../CLAUDE.md` holds the part
 session needs; this holds the parts only a rule-change needs, which is why it isn't loaded
 by default.
 
-## A rule is not finished until it states four things
+## A rule is not finished until it states five things
 
 Every rule promoted into a pack carries these, in the rule or in the section around it:
 
@@ -24,6 +24,11 @@ Every rule promoted into a pack carries these, in the rule or in the section aro
 - **Conflicts with** — the pack and line it contradicts, or "none found" after looking. With
   sixty-odd files, a contradiction is now likelier than a duplicate, and two packs that
   disagree make both unreliable.
+- **Binds whom** — the actor, named, in the rule's own sentence. A rule written as what some
+  tool does binds nobody on the paths that tool does not run, and reads as trivia about a
+  script to the session doing the thing by hand (obs-0055). Prohibit first, then name the
+  check that already covers part of it — which is the other half of **Enforced by**, not a
+  contradiction of it.
 
 ## The falsifiability bar
 

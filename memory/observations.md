@@ -340,3 +340,12 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-26)
 - **Target:** `../instructions/engineering.md`
 - **Status:** open
+
+### obs-0055 — 2026-08-26
+- **Observation:** Write a constraint as an instruction to whoever must obey it, and check it
+  covers every route to the outcome before shipping it — one phrased as what a tool does
+  binds nobody on the paths that tool never runs, and the gap is invisible from inside the
+  part that works.
+- **Rests on:** stated outright (2026-08-26)
+- **Target:** `../instructions/engineering.md`
+- **Status:** shipped
