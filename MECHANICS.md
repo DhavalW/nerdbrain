@@ -278,9 +278,34 @@ flowchart LR
 Deterministic — no model, no credentials. The draft still needs the human pass, which is why
 it opens a pull request instead of pushing.
 
-What a session needed and the repo didn't have goes in `docs/wanted.md` at the moment of
-discovery, no approval required. That's the worklist for the next capture run, and it exists
-because the session that hit the gap is the only one that knows about it.
+What a session needed and the repo didn't have gets written down at the moment of discovery,
+no approval required, because the session that hit the gap is the only one that knows about
+it. Which file depends on whether a URL closes it: `docs/wanted.md` for the gaps a person
+has to fill by hand, `docs/scrape-list.md` for the ones a crawler can.
+
+### The capture queue
+
+`docs/scrape-list.md` is a worklist written in a shape a program reads. SiteToPDF fetches it
+from GitHub, offers each row for approval, crawls the ones it gets, commits the PDF to
+`docs/references/<source>/`, and appends a receipt to `docs/scrape-done.md`.
+
+```mermaid
+flowchart LR
+    S["a session hits<br/>a docs gap"] --> Q["row in<br/>scrape-list.md"]
+    Q --> X["SiteToPDF:<br/>approve, crawl, commit"]
+    X --> R["receipt in<br/>scrape-done.md"]
+    X --> P["the PDF under<br/>docs/references/"]
+    R --> V["next session verifies<br/>the PDF and its index"]
+    P --> V
+    V -->|"all five checks pass"| D["both rows deleted"]
+    V -->|"any check fails"| K["both rows stay,<br/>and it says which"]
+```
+
+The pair is the mechanism. A queued row with a receipt beside it is one the tool believes it
+has already done, so nothing re-crawls while a person decides — and a verified pair leaves
+together, in the commit that files the capture. `instructions/doc-capture.md` carries the
+five checks; the gate carries the row format, because a malformed row is a capture that
+silently never happens.
 
 ---
 
@@ -300,6 +325,7 @@ because the session that hit the gap is the only one that knows about it.
 | 11 | Prose wraps at ~95 columns | Diffs nobody can read |
 | 12 | Every ledger entry parses | An observation the weekly job silently skips |
 | 13 | Every volatile claim carries a verify-by month | A stale number that looks handled |
+| 14 | Every queue row and receipt parses, and receipts answer queued rows | A capture nothing ever performs, or a half-done reconcile |
 
 Two things it deliberately does **not** do, because a gate that fails on the passage of time
 turns an unrelated push into someone else's problem:
@@ -363,7 +389,9 @@ flowchart LR
 has moved and merges it in when the merge is clean, so your fork is never quietly holding
 work to packs the original has since corrected. Only upstream `main` is fetched, nothing is
 ever pushed back, and history is merged rather than rebased — no checkout you already have
-stops working. When both sides changed the same lines it stops and asks: each clashing file
+stops working. Your own material never travels: not the captures under `docs/references/`,
+and not the three worklists beside them, including the capture queue a crawler reads and
+acts on. When both sides changed the same lines it stops and asks: each clashing file
 in plain language, the ways to reconcile it, what each one costs, and nothing committed until
 you choose. `instructions/fork-sync.md` has that half.
 

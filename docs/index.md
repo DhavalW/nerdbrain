@@ -42,6 +42,11 @@ site and produces the dated, multi-part PDFs this index is shaped around, in the
 `<source>_<YYYYMMDD>_<HHMM>[_partN].pdf` form the gate expects. Nothing here requires it —
 the naming convention is the only contract, and any tool that meets it works the same way.
 
+It can also fetch its own worklist. `scrape-list.md` is a queue of start URLs a session
+wrote down when it hit a docs gap; SiteToPDF reads it out of GitHub, captures each row into
+`references/<source>/`, and appends a receipt to `scrape-done.md` for the next session to
+verify and clear (`../instructions/doc-capture.md`).
+
 ## Filenames are versioned
 
 Captures are named `<source>_<YYYYMMDD>_<HHMM>[_partN].pdf` — the exact string changes with
@@ -90,5 +95,7 @@ every refresh. So:
 ## What's missing
 
 `wanted.md` is the other half of this index: the docs a session needed and this repo didn't
-have. Anything that fell through to live docs goes there when it happens, and it is the
-worklist for the next capture run.
+have and no crawler can fetch — a PDF someone has to obtain, a page range a map never
+covered. Anything with a crawlable start URL goes on `scrape-list.md` instead. Both get
+written the moment a session falls through to live docs, which is the only moment anyone
+knows.

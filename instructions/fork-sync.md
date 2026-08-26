@@ -80,9 +80,25 @@ Report what landed in a line per file, then get on with the task that was actual
 never committed, so name the files and offer to commit them, stash them, or leave the sync for
 later.
 
+## What the sync never carries
+
+Four paths are the owner's own and cross in neither direction, by any means — not this sync,
+and not a merge, cherry-pick or pull request you do by hand: `../docs/references/` and
+everything in it, `../docs/scrape-list.md`, `../docs/scrape-done.md`, `../docs/wanted.md`.
+They are filtered out before the conflict list is built, so they never reach the
+conversation above — a clash in one is not a decision anybody should be asked to make, and
+`fork-sync.sh` settles it by keeping this clone's version.
+
+Two consequences worth knowing rather than rediscovering. A file the original *added* under
+one of those paths is removed from the merge rather than adopted, which is what stops an
+upstream capture queue reaching a crawler that would act on it. And a `plan` that lists
+nothing while `check` said `conflict` cannot happen — the verdict is computed from the same
+filtered list.
+
 ## If the script isn't there
 
 The protocol is the instruction; the script is only how it gets run. In a checkout that
 predates it, do the same thing by hand: add the `upstream` remote, `git fetch --no-tags
 upstream main`, read `git rev-list --count HEAD..upstream/main`, and merge with `--no-ff`,
-under every rule above.
+under every rule above — then put back this clone's own copy of the four local-only paths,
+which is the one step a plain `git merge` will not do for you.

@@ -12,8 +12,11 @@
 # Exit 1 = the user has to decide something. Stop and ask.
 # Exit 2 = the script could not run.
 #
-# It never pushes anywhere, never rebases, and never rewrites history. The protocol
-# it implements — including what to do with each verdict — is in CLAUDE.md.
+# It never pushes anywhere, never rebases, and never rewrites history. Nor does it
+# carry the files that belong to whoever owns this clone — the captures under
+# docs/references/ and the three worklists beside them, listed in LOCAL_ONLY_GLOBS
+# below. The protocol it implements — including what to do with each verdict — is
+# in CLAUDE.md.
 
 set -uo pipefail
 
@@ -47,6 +50,77 @@ ORIGIN="$(git config --get remote.origin.url || true)"
 
 
 CHOICES="$(git rev-parse --git-dir)/fork-sync-choices"
+
+# Paths that belong to whoever owns this clone, and travel in neither direction.
+#
+# The captures under docs/references/ are the obvious case: they are somebody's
+# own reference library, they are large, and the original ships none. The three
+# worklists are the same thing in text - what this owner's sessions needed and
+# did not have, and what a capture tool has done about it since.
+#
+# Excluding them is not tidiness. docs/scrape-list.md is read by a tool that
+# opens each URL in the owner's browser and commits the result to their
+# repository, so a row arriving here from anywhere but their own sessions is a
+# row nobody in this clone asked for. Merging it in would be this sync handing
+# an unattended crawler its instructions.
+#
+# Matched as shell `case` patterns, where `*` crosses slashes - so the one glob
+# covers every capture folder and its index.
+LOCAL_ONLY_GLOBS=(
+  'docs/scrape-list.md'
+  'docs/scrape-done.md'
+  'docs/wanted.md'
+  'docs/references/*'
+)
+
+is_local_only() {
+  local path="$1" glob
+  for glob in "${LOCAL_ONLY_GLOBS[@]}"; do
+    # shellcheck disable=SC2254
+    case "$path" in $glob) return 0 ;; esac
+  done
+  return 1
+}
+
+# Filter a list of paths on stdin down to the ones this sync is allowed to see.
+drop_local_only() {
+  local line
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    is_local_only "$line" || printf '%s\n' "$line"
+  done
+}
+
+# Put this fork's own copy of every local-only file back, mid-merge.
+#
+# Two cases, one answer. Where upstream changed such a file and git merged it
+# cleanly, the merge result holds upstream's version and it is replaced. Where
+# both sides changed it, the file is sitting unmerged and this is what resolves
+# it - which is why it runs before anything asks the user to decide: a clash
+# here is not a clash anyone should be shown.
+#
+# HEAD is still the pre-merge fork commit while a --no-commit merge is open, so
+# it is the authority on what this fork had. A local-only file that exists only
+# upstream is removed rather than adopted (take_side handles that side).
+keep_local_only() {
+  local path restored=""
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    is_local_only "$path" || continue
+    take_side "$path" HEAD || return 1
+    restored="$restored$path"$'\n'
+  done < <(
+    { git diff --name-only "HEAD...$UPSTREAM_REF"
+      git diff --name-only --diff-filter=U
+    } | sort -u
+  )
+
+  if [ -n "$restored" ]; then
+    say "kept this clone's own copy of:"
+    printf '%s' "$restored" | indent
+  fi
+  return 0
+}
 
 # During a merge, git's "ours" is this fork and "theirs" is the original. Nobody remembers
 # which way round that goes, so the choices are spelled fork= and upstream= instead.
@@ -156,14 +230,22 @@ incoming_commits() {
   git log --oneline --no-decorate "HEAD..$UPSTREAM_REF" | indent
 }
 
-INCOMING="$(git diff --name-only "HEAD...$UPSTREAM_REF")"
+# Local-only paths are dropped here, once, so nothing downstream of this line -
+# the overlap check, the conflict list, the plan, the questions put to the user -
+# can ask about a file this sync is not going to touch.
+INCOMING="$(git diff --name-only "HEAD...$UPSTREAM_REF" | drop_local_only)"
 DIRTY="$(git status --porcelain --untracked-files=no | cut -c4- | sed 's/.* -> //')"
 OVERLAP="$(comm -12 <(printf '%s\n' "$INCOMING" | sort -u) <(printf '%s\n' "$DIRTY" | sort -u) | sed '/^$/d')"
 
 # A dry run: writes no ref, touches no working tree. Exit 1 means the merge would conflict.
 MT="$(git merge-tree --write-tree --name-only HEAD "$UPSTREAM_REF" 2>/dev/null)"
 MT_RC=$?
-CONFLICTS="$(printf '%s\n' "$MT" | tail -n +2 | sed -n '/^$/q;p')"
+CONFLICTS="$(printf '%s\n' "$MT" | tail -n +2 | sed -n '/^$/q;p' | drop_local_only)"
+
+# merge-tree reports a conflict in a local-only file the same way as any other,
+# and that one is already decided. What is left after the filter is what a
+# person would actually have to answer for.
+[ -n "$CONFLICTS" ] || MT_RC=0
 
 case "${1:-check}" in
   check)
@@ -207,10 +289,15 @@ case "${1:-check}" in
       fi
     fi
 
-    if git merge --no-ff --no-edit -m "Merge upstream main into $BRANCH" "$UPSTREAM_REF" >/dev/null; then
+    # Committed in two steps rather than one, so this fork's own files can be put
+    # back before the merge commit records upstream's versions of them.
+    git merge --no-ff --no-commit "$UPSTREAM_REF" >/dev/null 2>&1
+    keep_local_only || { verdict error; git merge --abort 2>/dev/null; say "could not restore local-only files"; exit 2; }
+
+    BLOCKED="$(git diff --name-only --diff-filter=U)"
+    if [ -z "$BLOCKED" ] && git commit --no-edit -m "Merge upstream main into $BRANCH" >/dev/null 2>&1; then
       say "merged $BEHIND commit(s) from upstream main"
     else
-      BLOCKED="$(git diff --name-only --diff-filter=U)"
       git merge --abort 2>/dev/null
       [ "$STASHED" = yes ] && git stash pop >/dev/null 2>&1
       verdict conflict
@@ -287,6 +374,9 @@ case "${1:-check}" in
     if ! git rev-parse --verify -q MERGE_HEAD >/dev/null; then
       git merge --no-ff --no-commit "$UPSTREAM_REF" >/dev/null 2>&1
     fi
+    # Before UNMERGED is read: a local-only file is never a question, so it must
+    # not be able to show up in the list of things demanding an answer.
+    keep_local_only || { verdict error; say "could not restore local-only files"; exit 2; }
 
     UNMERGED="$(git diff --name-only --diff-filter=U)"
     : > "$CHOICES"

@@ -322,7 +322,8 @@
         <p>
           Your preferences, your context, your captured documentation — in your own
           repository, public or private as you choose. Nothing is uploaded anywhere to make
-          this work.
+          this work, and none of it travels when your fork syncs with the original: the
+          captures and the worklists beside them stay in the clone that owns them.
         </p>
       </div>
 
@@ -467,7 +468,27 @@
         <ul>
           <li><strong>SiteToPDF</strong> is the companion tool: it turns a documentation site into the dated, multi-part PDFs this index is shaped around.</li>
           <li>Nothing here requires it — the filename convention is the only contract.</li>
-          <li>A gap a session hits gets written to a worklist the moment it's noticed.</li>
+          <li>A gap a session hits gets written down the moment it's noticed, because that session is the only one that knows.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="panel">
+        <h3>And the library fills itself</h3>
+        <ul>
+          <li>Needed docs that aren't here yet? The agent writes a row into <code>docs/scrape-list.md</code> — where the capture belongs, where to start, and what the work needed it for.</li>
+          <li>SiteToPDF reads that queue and offers you each row. One click captures it, commits the PDF, and leaves a receipt.</li>
+          <li>The next session checks the PDF landed and is indexed, then clears the row. Nothing re-crawls while it waits, so a bad capture never repeats on a schedule.</li>
+          <li>Nothing is crawled that you didn't approve — the queue is a file, and a file can be written by anything with push access.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>What that closes</h3>
+        <ul>
+          <li>The first loop keeps what you already captured current. This one is how the shelf grows.</li>
+          <li>The gap is noticed, queued, captured and filed without anyone remembering it existed.</li>
+          <li>Gaps no crawler can close — a spec behind a login, a page range a map missed — go to <code>docs/wanted.md</code> for a person instead.</li>
         </ul>
       </div>
     </div>

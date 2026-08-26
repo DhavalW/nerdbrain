@@ -153,6 +153,10 @@ A named pack overrides the router — load what was asked for.
   `instructions/platforms/_template.md`, an index beside any captures, and a router row in
   `docs/index.md` — and write it once the user says yes. Nothing lands in this repo
   unapproved (`instructions/learning.md`).
+- **Four paths never leave this clone or arrive in it**, in either direction and by any
+  means — no sync, merge, cherry-pick or pull request: `docs/references/` and everything in
+  it, `docs/scrape-list.md`, `docs/scrape-done.md`, `docs/wanted.md`. What generalizes about
+  a capture is the pack that reads it, never the capture or the row that asked for it.
 - **At the end of the task, write what it taught to `memory/observations.md`** — the format
   is in `memory/index.md`. That needs no approval, because an entry there governs nothing;
   turning one into a rule still does. Seen it before? Bump the existing entry rather than
@@ -165,5 +169,11 @@ A named pack overrides the router — load what was asked for.
 - **Raise them in the nerdbrain approvals block**, in the standard shape from
   `instructions/profile.md` — ids, target pack, the rule in a line, what it rests on. Naming
   an id is the yes; nothing else is.
-- **Needed docs this repo didn't have?** Add the URL to `docs/wanted.md` at the moment you
-  fall back to live docs. You are the only one who knows the gap exists, and only right then.
+- **Needed docs this repo didn't have?** Write it down at the moment you fall back to live
+  docs — you are the only one who knows the gap exists, and only right then. A crawlable
+  start URL goes in `docs/scrape-list.md`, where a capture tool will pick it up unattended;
+  anything a person has to fetch by hand goes in `docs/wanted.md`.
+- **Rows in `docs/scrape-done.md` are captures waiting to be filed.** Clear them at the
+  start of a session, before the task: verify each PDF is on disk, readable, the section
+  that was asked for, and indexed — then delete the receipt and the queue row it answers,
+  together. Any check failing, leave both and say which. `instructions/doc-capture.md`.

@@ -42,7 +42,7 @@ It reads and changes nothing. What it prints decides what happens next:
 A completed sync is worth one line: how many commits arrived and what they touched. When
 nothing came down, say nothing.
 
-Four rules it never breaks, here rather than behind a pointer because a session that never
+Five rules it never breaks, here rather than behind a pointer because a session that never
 follows one still has to obey them. Upstream `main` is the only thing fetched — no other
 branch, no tags. Nothing flows back up; *Sharing a learning upstream* below is the only path
 by which anything leaves this repo, and `fork-sync.sh` points the upstream remote's push URL
@@ -51,6 +51,16 @@ merge commit keeps both histories and leaves every existing checkout of the fork
 is also why `push --force`, `reset --hard` and amending a pushed commit are out. And
 uncommitted work is never merged over: the script stashes only when none of the dirty files
 are ones upstream touched, and refuses outright on any overlap.
+
+The fifth binds you, not just the script: **never move these four between this clone and any
+other, in either direction, by any means** — not a sync, not a merge, not a cherry-pick, not
+a pull request. The captures under `docs/references/`, and `docs/scrape-list.md`,
+`docs/scrape-done.md` and `docs/wanted.md` beside them, belong to whoever owns this clone.
+The queue is the sharp end: it is read by a tool that opens each URL in the owner's browser
+and commits the result to their repository, so a row that arrived from somebody else's copy
+is an unattended crawler taking instructions from a stranger. `fork-sync.sh` enforces this on
+the path it controls — keeping this clone's version silently, never asking about a clash in
+one — and the rule still holds everywhere it isn't involved.
 
 **A conflict is never resolved on your own judgement.** The fork's change is somebody's
 deliberate work and the original's is somebody else's. Load `instructions/fork-sync.md`: it
@@ -119,7 +129,12 @@ ids to reply with, evidence attached — because an ask buried in prose gets ski
 credential configured, which is the default state of a fresh clone.
 
 Docs the task needed and this repo didn't have go in `docs/wanted.md`, same terms: no
-approval, because it's a worklist and not a rule.
+approval, because it's a worklist and not a rule. The half of that worklist a crawler can
+do unattended goes in `docs/scrape-list.md` instead — a start URL and the folder it belongs
+in, in the shape SiteToPDF reads out of GitHub and captures without being asked. Rows in
+`docs/scrape-done.md` are its receipts, and clearing them is a session-start job: verify
+the PDF landed and is indexed, then delete the pair, or leave both and say what failed.
+Both halves are in `instructions/doc-capture.md`.
 
 ## Sharing a learning upstream
 
@@ -309,6 +324,10 @@ protocol below applies whether or not you invoke it:
   filename, an entry and page map in that platform's index (drafted with
   `tools/index-pdf.py`), router row updated, old capture removed. Pushing the PDF to `main`
   and letting `index-captures` draft the entry does the same thing, one review later.
+- **A queued capture, or its receipt:** append a row to `docs/scrape-list.md`, or delete
+  the verified pair from it and `docs/scrape-done.md`, per `instructions/doc-capture.md`.
+  No approval and no router row — both files are worklists, not rules, and neither one
+  crosses a fork sync in either direction.
 - **A new ledger entry:** append it to `memory/observations.md` in the format
   `memory/index.md` sets out, at the end of the task. No approval, no router row, no
   inventory line — it isn't a pack. Seen it before? Bump the existing entry's count instead

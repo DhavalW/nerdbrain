@@ -63,6 +63,11 @@ applies to the maintainers. The short version:
   resolve at read time. The gate rejects them.
 - **Vendor documentation itself.** Don't send captures upstream — they're large, they're
   someone else's copyright, and they go stale. Send the pack that *reads* one.
+- **Your worklists.** `docs/scrape-list.md`, `docs/scrape-done.md` and `docs/wanted.md` are
+  local to your clone, in both directions: `fork-sync.sh` won't carry them down, and they
+  don't belong in a PR going up. What your gaps taught is a pack; the queue row that
+  produced the capture isn't anybody else's business, and a queue row merged into somebody
+  else's fork is a crawler taking orders from a stranger.
 
 ## One rule per commit
 
