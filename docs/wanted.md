@@ -11,6 +11,10 @@ because nothing local covered the question knows something worth writing down â€
 the only one who knows it, right then. By the next session that knowledge is gone and the
 gap gets rediscovered from scratch.
 
+Local to this clone. Your gaps are not anybody else's, so a fork sync carries this file in
+neither direction, along with `scrape-list.md`, `scrape-done.md` and the captures under
+`references/`.
+
 ## How to add
 
 Any session, no approval needed â€” this file routes nothing and governs nothing.

@@ -9,6 +9,9 @@ handoff between a tool that cannot read the repo's indexes and a session that ca
 lives for one reconcile and then goes, along with the `scrape-list.md` row that asked for
 it (`../instructions/doc-capture.md`).
 
+Local to this clone, like the queue it answers and the captures it describes. A fork sync
+carries none of the three in either direction (`../instructions/fork-sync.md`).
+
 **A row here is a claim, not proof.** The tool reports what it committed; whether the PDF
 is on disk, has selectable text, and is indexed is checked by the session that clears it.
 An unverifiable row stays put and says why.

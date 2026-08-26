@@ -10,6 +10,12 @@ happens to be machine-readable.
 silently never happens, so `../tools/check.py` rejects one rather than letting it sit here
 looking queued.
 
+**This file is local to whoever owns this clone**, like the captures it produces. A fork
+sync carries it in neither direction — `fork-sync.sh` keeps this clone's copy and never
+raises a clash in it. That is not tidiness: the tool reading these rows opens each URL in
+the owner's browser and commits the result to their repository, so a row that arrived by
+merging somebody else's copy would be an unattended crawler working from a stranger's list.
+
 ## How to add a row
 
 Append to the table under `## Queue`. Four columns, in this order, no others:

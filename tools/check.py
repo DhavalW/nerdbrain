@@ -635,7 +635,13 @@ BUDGETS = {
     # load is a pack that never runs, exactly as with the fork-sync check above.
     # The protocol itself is in instructions/doc-capture.md, which loads only when
     # there is a gap to queue or a row to clear.
-    "CLAUDE.md": 349,
+    #
+    # 349 -> 358 for the fifth rule the fork sync never breaks: what it will not
+    # carry, in either direction. It sits with the other four rather than behind
+    # a pointer for the same reason they do - a session that never opens
+    # instructions/fork-sync.md still has to know that merging somebody else's
+    # capture queue hands an unattended crawler its instructions.
+    "CLAUDE.md": 358,
     # The doc router; keep it a router. 95 -> 101 for the capture queue: where the
     # rows come from, where the receipts go, and the split with wanted.md that
     # keeps the two worklists disjoint. It stays a router - no filenames, no maps.
@@ -673,6 +679,17 @@ BUDGETS = {
     # --- already over the ceiling: pinned at their exact current size, so every
     # --- further line is a deliberate, visible decision. Trim one, lower its number.
     "instructions/security.md": 105,
+    # The whole protocol for agents that never read CLAUDE.md, and one file by
+    # design - splitting it would leave half of it unreachable to exactly the
+    # readers it exists for, which is the opposite of a seam. 100 -> 104 for what
+    # the fork sync will not carry; it belongs next to the other sync rules,
+    # because an agent following only this file still has to obey it.
+    "AGENTS.md": 104,
+    # Loads on one trigger - a merge that collided - so every section fires
+    # together and there is no honest seam to split at. 100 -> 103 for the paths
+    # the sync filters out before the conflict list is built, which is the
+    # difference between a clash the user answers and one nobody sees.
+    "instructions/fork-sync.md": 103,
     # Always loaded - the worst one to bloat. 165 -> 168 for the standing rule that
     # context is spent like it runs out: page range not file, delta not set,
     # function not module. Four lines that cost every session in order to save far
@@ -749,7 +766,10 @@ ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
 # every session so that a docs gap gets written where a crawler will find it and
 # a landed capture gets filed instead of accumulating receipts. The 72-line
 # protocol stayed in a routed pack.
-ALWAYS_LOADED_BUDGET = 889
+#
+# 889 -> 898 for what the fork sync will not carry. Stated outright by the user:
+# the captures and the worklists beside them are local to whoever owns the clone.
+ALWAYS_LOADED_BUDGET = 898
 
 
 def check_always_loaded_total(errors):

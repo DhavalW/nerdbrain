@@ -389,7 +389,9 @@ flowchart LR
 has moved and merges it in when the merge is clean, so your fork is never quietly holding
 work to packs the original has since corrected. Only upstream `main` is fetched, nothing is
 ever pushed back, and history is merged rather than rebased — no checkout you already have
-stops working. When both sides changed the same lines it stops and asks: each clashing file
+stops working. Your own material never travels: not the captures under `docs/references/`,
+and not the three worklists beside them, including the capture queue a crawler reads and
+acts on. When both sides changed the same lines it stops and asks: each clashing file
 in plain language, the ways to reconcile it, what each one costs, and nothing committed until
 you choose. `instructions/fork-sync.md` has that half.
 

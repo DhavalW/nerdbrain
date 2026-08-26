@@ -66,6 +66,10 @@ receipt to force a retry produces the same bad capture on a schedule.
   because the capture belongs to a tool that can do it unattended and version the result.
 - **Not a record of what this repo has.** That is the per-source index, always. A row is in
   flight by definition — it is written to be deleted.
+- **Not shared.** Both files, and the captures under `../docs/references/`, belong to
+  whoever owns this clone; a fork sync carries none of them in either direction, and a row
+  never leaves in an upstream contribution. What generalizes about a capture is a platform
+  pack, not the queue row that produced it.
 - **Not a place for anything sensitive.** A start URL behind a login, an internal hostname,
   a customer's subdomain: none of them go in a file the whole repo can read, and a capture
   tool with a token would commit the result next to it. The rule in `learning.md` applies
