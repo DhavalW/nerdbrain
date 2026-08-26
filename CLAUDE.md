@@ -52,13 +52,15 @@ is also why `push --force`, `reset --hard` and amending a pushed commit are out.
 uncommitted work is never merged over: the script stashes only when none of the dirty files
 are ones upstream touched, and refuses outright on any overlap.
 
-The fifth is what the sync will not carry, in either direction: the captures under
-`docs/references/`, and `docs/scrape-list.md`, `docs/scrape-done.md` and `docs/wanted.md`
-beside them. Those belong to whoever owns this clone. The queue is the sharp end — it is read
-by a tool that opens each URL in the owner's browser and commits the result to their
-repository, so a row that arrived by merging somebody else's copy would be an unattended
-crawler taking instructions from a stranger. `fork-sync.sh` keeps this clone's version of all
-four, silently, and never asks about a clash in one.
+The fifth binds you, not just the script: **never move these four between this clone and any
+other, in either direction, by any means** — not a sync, not a merge, not a cherry-pick, not
+a pull request. The captures under `docs/references/`, and `docs/scrape-list.md`,
+`docs/scrape-done.md` and `docs/wanted.md` beside them, belong to whoever owns this clone.
+The queue is the sharp end: it is read by a tool that opens each URL in the owner's browser
+and commits the result to their repository, so a row that arrived from somebody else's copy
+is an unattended crawler taking instructions from a stranger. `fork-sync.sh` enforces this on
+the path it controls — keeping this clone's version silently, never asking about a clash in
+one — and the rule still holds everywhere it isn't involved.
 
 **A conflict is never resolved on your own judgement.** The fork's change is somebody's
 deliberate work and the original's is somebody else's. Load `instructions/fork-sync.md`: it

@@ -25,10 +25,11 @@ wait, then carry out their answer with `tools/fork-sync.sh resolve`.
 The sync is one-way and history-preserving: upstream `main` only, merge never rebase, no
 force-push, nothing pushed back to the original, and no merging over uncommitted work.
 
-It carries nothing that belongs to whoever owns this clone either: `docs/references/` and
-everything in it, `docs/scrape-list.md`, `docs/scrape-done.md`, `docs/wanted.md`. The script
-keeps this clone's version and never raises a clash in one. The queue is why that matters —
-a capture tool reads it and opens each URL in the owner's browser.
+Four paths never move between this clone and any other, in either direction, by any means —
+no sync, no merge, no cherry-pick, no pull request: `docs/references/` and everything in it,
+`docs/scrape-list.md`, `docs/scrape-done.md`, `docs/wanted.md`. The script enforces that
+where it runs; the rule binds you where it doesn't. The queue is why — a capture tool reads
+it and opens each URL in the owner's browser.
 
 ## As a reference, alongside the repo actually being worked on
 

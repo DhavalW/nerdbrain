@@ -82,8 +82,9 @@ later.
 
 ## What the sync never carries
 
-Four paths are the owner's own and cross in neither direction: `../docs/references/` and
-everything in it, `../docs/scrape-list.md`, `../docs/scrape-done.md` and `../docs/wanted.md`.
+Four paths are the owner's own and cross in neither direction, by any means — not this sync,
+and not a merge, cherry-pick or pull request you do by hand: `../docs/references/` and
+everything in it, `../docs/scrape-list.md`, `../docs/scrape-done.md`, `../docs/wanted.md`.
 They are filtered out before the conflict list is built, so they never reach the
 conversation above — a clash in one is not a decision anybody should be asked to make, and
 `fork-sync.sh` settles it by keeping this clone's version.

@@ -153,6 +153,10 @@ A named pack overrides the router — load what was asked for.
   `instructions/platforms/_template.md`, an index beside any captures, and a router row in
   `docs/index.md` — and write it once the user says yes. Nothing lands in this repo
   unapproved (`instructions/learning.md`).
+- **Four paths never leave this clone or arrive in it**, in either direction and by any
+  means — no sync, merge, cherry-pick or pull request: `docs/references/` and everything in
+  it, `docs/scrape-list.md`, `docs/scrape-done.md`, `docs/wanted.md`. What generalizes about
+  a capture is the pack that reads it, never the capture or the row that asked for it.
 - **At the end of the task, write what it taught to `memory/observations.md`** — the format
   is in `memory/index.md`. That needs no approval, because an entry there governs nothing;
   turning one into a rule still does. Seen it before? Bump the existing entry rather than

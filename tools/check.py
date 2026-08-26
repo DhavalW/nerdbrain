@@ -641,7 +641,13 @@ BUDGETS = {
     # a pointer for the same reason they do - a session that never opens
     # instructions/fork-sync.md still has to know that merging somebody else's
     # capture queue hands an unattended crawler its instructions.
-    "CLAUDE.md": 358,
+    #
+    # 358 -> 360 because the rule was written as a description of what
+    # fork-sync.sh does, which binds nothing: an agent hand-merging, cherry-
+    # picking or opening a pull request was told only how a script it was not
+    # running behaves. Rewritten as a prohibition on the agent, naming the ways
+    # a file actually moves between clones. Two lines to turn a fact into a rule.
+    "CLAUDE.md": 360,
     # The doc router; keep it a router. 95 -> 101 for the capture queue: where the
     # rows come from, where the receipts go, and the split with wanted.md that
     # keeps the two worklists disjoint. It stays a router - no filenames, no maps.
@@ -683,13 +689,17 @@ BUDGETS = {
     # design - splitting it would leave half of it unreachable to exactly the
     # readers it exists for, which is the opposite of a seam. 100 -> 104 for what
     # the fork sync will not carry; it belongs next to the other sync rules,
-    # because an agent following only this file still has to obey it.
-    "AGENTS.md": 104,
+    # because an agent following only this file still has to obey it. 104 -> 105
+    # when that turned from a description of the script into a rule for the
+    # reader, which is the half that binds when no script is involved.
+    "AGENTS.md": 105,
     # Loads on one trigger - a merge that collided - so every section fires
     # together and there is no honest seam to split at. 100 -> 103 for the paths
     # the sync filters out before the conflict list is built, which is the
-    # difference between a clash the user answers and one nobody sees.
-    "instructions/fork-sync.md": 103,
+    # difference between a clash the user answers and one nobody sees. 103 -> 104
+    # for naming the hand-done paths - merge, cherry-pick, pull request - that
+    # the script cannot filter and the rule still covers.
+    "instructions/fork-sync.md": 104,
     # Always loaded - the worst one to bloat. 165 -> 168 for the standing rule that
     # context is spent like it runs out: page range not file, delta not set,
     # function not module. Four lines that cost every session in order to save far
@@ -769,7 +779,11 @@ ALWAYS_LOADED = ("CLAUDE.md", "instructions/index.md", "instructions/core.md",
 #
 # 889 -> 898 for what the fork sync will not carry. Stated outright by the user:
 # the captures and the worklists beside them are local to whoever owns the clone.
-ALWAYS_LOADED_BUDGET = 898
+#
+# 898 -> 900 when that stopped describing a script and started forbidding a thing.
+# A rule phrased as tool behaviour is not a rule - it says nothing to the session
+# that merges by hand or opens a pull request.
+ALWAYS_LOADED_BUDGET = 900
 
 
 def check_always_loaded_total(errors):
