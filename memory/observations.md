@@ -332,3 +332,11 @@ starting state, not a broken one.
 - **Rests on:** seen once (2026-08-26)
 - **Target:** `../instructions/security.md`
 - **Status:** open
+
+### obs-0054 — 2026-08-26
+- **Observation:** A boundary that holds only because one side happens to be empty is not a
+  boundary — write the exclusion down and enforce it, because the day somebody fills that
+  side is the day it silently stops holding.
+- **Rests on:** stated outright (2026-08-26)
+- **Target:** `../instructions/engineering.md`
+- **Status:** open
