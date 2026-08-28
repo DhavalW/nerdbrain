@@ -15,7 +15,8 @@ It watches how you work, writes down what it learned, and asks you to approve it
 once and it follows that rule in every project after that — a month later, in a different
 codebase, without you remembering you ever said it.
 
-It is a plain GitHub repository. No service, no account, nothing running in the background.
+It is a GitHub repository, and that's the whole of it. No service, no account, nothing
+running in the background.
 
 > **Works with Claude Code today.** It's markdown in a git repo, so in principle any agent
 > that can read a repository can use it — but Claude Code is the only one it has been
@@ -25,27 +26,37 @@ It is a plain GitHub repository. No service, no account, nothing running in the 
 
 ## How to use it
 
-**Attach this repo to your session, alongside the project you're working on.** That's the
-whole setup. Nothing to type, no command to remember.
+Five steps, and only the first two take any effort.
 
-- **Claude Code on the web** — add `nerdbrain` as a second repository in the session.
+**1. Fork it.** The brain fills up with your preferences, so it should be your repository.
+
+**2. Attach it to a project.** Add your fork to the session, next to the project you're
+working on. That's the whole setup — nothing to type, no command to remember.
+
+- **Claude Code on the web** — add your `nerdbrain` fork as a second repository.
 - **Claude Code in the terminal** — clone it anywhere, then `claude --add-dir <path>`, or
   `/add-dir <path>` once you're already in.
 
-The agent reads `CLAUDE.md` at the top of this repo and takes it from there: it loads the
-instructions that fit the task, follows them, and records anything worth keeping when the
-task is done.
+**3. Work as normal.** It turns itself on. The agent reads `CLAUDE.md` at the top of this
+repo, loads the instructions that fit the task, follows them, and records anything worth
+keeping when the task is done.
 
-Two other ways in, if attaching the repo doesn't suit you:
+**4. Approve what it learned.** At the end of a task it asks to turn what it noticed into
+a rule. Say yes to the good ones; ignoring the rest costs nothing.
+
+**5. Send the common ones upstream, every so often.** Rules that would help anyone go back
+to the original as a pull request — with your permission, every time.
 
 ```bash
-git clone https://github.com/dhavalw/nerdbrain.git ~/.nerdbrain
-~/.nerdbrain/install.sh          # installs the /nerdbrain skill globally
+# steps 1 and 2, in the terminal
+git clone https://github.com/<you>/nerdbrain.git ~/.nerdbrain
+claude --add-dir ~/.nerdbrain
 ```
 
-Then type `/nerdbrain` in any project to pull the instructions in on demand. Or copy
-`templates/CLAUDE.md` into a project's root, and that project picks them up every session
-with no repo attached at all.
+Two other ways in, if attaching the repo doesn't suit you. Run `~/.nerdbrain/install.sh` to
+install the skills globally, then type `/nerdbrain` in any project to pull the instructions
+in on demand. Or copy `templates/CLAUDE.md` into a project's root, and that project picks
+them up every session with no repo attached at all.
 
 ---
 
@@ -126,9 +137,9 @@ brain has rotted — a broken reference, an unrouted pack, a file grown past its
 
 The brain is only as good as what's in it, and what's in it should be yours.
 
-1. **Fork, clone, install.** What ships is the craft layer — how to plan, test, secure,
-   write and ship — plus the machinery that learns. Opinionated defaults, and yours to
-   strike.
+1. **Strike what you disagree with.** What ships is the craft layer — how to plan, test,
+   secure, write and ship — plus the machinery that learns. Opinionated defaults, and yours
+   to overrule.
 2. **Empty what isn't yours.** `instructions/profile.md` starts nearly blank on purpose,
    and `memory/observations.md` ships with candidate rules from other people's work.
    Clearing it is a supported starting state.

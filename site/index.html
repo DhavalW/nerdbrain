@@ -43,6 +43,12 @@
   a{color:inherit}
   code,pre,.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
   .wrap{max-width:var(--max); margin:0 auto; padding:0 24px}
+  :focus-visible{outline:2px solid var(--acc); outline-offset:3px; border-radius:5px}
+  section[id]{scroll-margin-top:76px}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{transition-duration:.01ms !important; animation-duration:.01ms !important}
+    .btn:hover,.card:hover{transform:none}
+  }
   .serif{font-family:"Instrument Serif",Georgia,serif; font-weight:400; letter-spacing:-0.01em}
 
   /* ---------- nav ---------- */
@@ -52,11 +58,12 @@
     border-bottom:1px solid var(--line);
   }
   nav .wrap{display:flex; align-items:center; gap:28px; height:62px}
-  .brand{display:flex; align-items:center; gap:9px; font-weight:600; letter-spacing:-0.02em; text-decoration:none}
+  .brand{display:flex; align-items:center; gap:9px; font-weight:600; letter-spacing:-0.02em; text-decoration:none; padding:8px 0}
   .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
   nav .links{display:flex; gap:24px; margin-left:auto; align-items:center}
-  nav .links a{color:var(--ink-2); text-decoration:none; font-size:14.5px}
+  nav .links a{color:var(--ink-2); text-decoration:none; font-size:14.5px; padding:9px 0}
   nav .links a:hover{color:var(--ink)}
+  .nav-cta{margin-left:24px}
   .btn{
     display:inline-flex; align-items:center; gap:8px; text-decoration:none;
     padding:10px 17px; border-radius:10px; font-size:14.5px; font-weight:550;
@@ -66,7 +73,27 @@
   .btn:hover{border-color:var(--ink-3); transform:translateY(-1px)}
   .btn.primary{background:var(--ink); color:var(--bg); border-color:var(--ink)}
   .btn.primary:hover{opacity:.88}
-  @media (max-width:720px){ nav .links a:not(.btn){display:none} }
+
+  /* Small screens: the nav stops being sticky (two rows of chrome is too much of a
+     phone viewport to give up permanently) and the section links become a scrollable
+     strip instead of disappearing. */
+  @media (max-width:720px){
+    nav{position:static}
+    nav .wrap{height:auto; flex-wrap:wrap; gap:10px; padding-top:11px; padding-bottom:9px}
+    .nav-cta{margin-left:auto; padding:9px 15px}
+    nav .links{
+      order:3; width:100%; margin-left:0; gap:22px;
+      overflow-x:auto; overscroll-behavior-x:contain;
+      scrollbar-width:none; -ms-overflow-style:none;
+    }
+    nav .links::-webkit-scrollbar{display:none}
+    nav .links a{white-space:nowrap; padding:5px 0}
+    /* fade the right edge so the strip reads as scrollable without a scrollbar */
+    nav .links{
+      -webkit-mask-image:linear-gradient(to right,#000 86%,transparent);
+      mask-image:linear-gradient(to right,#000 86%,transparent);
+    }
+  }
 
   /* ---------- hero ---------- */
   header{position:relative; overflow:hidden; padding:96px 0 78px}
@@ -174,9 +201,48 @@
   .final .cta{justify-content:center}
   footer{border-top:1px solid var(--line); padding:38px 0; color:var(--ink-3); font-size:14px}
   footer .wrap{display:flex; gap:20px; flex-wrap:wrap; align-items:center}
-  footer a{color:var(--ink-2); text-decoration:none; margin-right:18px}
+  footer a{color:var(--ink-2); text-decoration:none; margin-right:18px; display:inline-block; padding:7px 0}
   footer a:hover{color:var(--ink)}
   .ml-auto{margin-left:auto}
+  .inline-link{color:var(--acc); display:inline-block; padding:3px 0}
+
+  /* ---------- small screens ---------- */
+  /* Laid out for a 375px phone first: tighter rhythm, full-width tap targets, and
+     nothing that needs a hover to be usable. */
+  @media (max-width:720px){
+    section[id]{scroll-margin-top:8px}
+    .wrap{padding:0 20px}
+    header{padding:40px 0 54px}
+    section{padding:54px 0}
+    .final{padding:70px 0}
+    .sec-head{margin-bottom:32px}
+    .sec-head p{font-size:16.5px}
+    .lede{margin-top:20px}
+    .lede.sub{margin-top:14px; font-size:16px}
+    .eyebrow{margin-bottom:20px; font-size:12.5px}
+    .cta{margin-top:28px; gap:10px}
+    .cta .btn{flex:1 1 46%; justify-content:center; min-height:46px}
+    .cta .note{flex:1 1 100%; margin-top:2px}
+    .term{margin-top:30px; box-shadow:none}
+    .term pre{font-size:12.5px; padding:16px 17px}
+    .panel{padding:22px 20px}
+    .card{padding:24px 22px}
+    .card.feature h3{font-size:21px}
+    .step{padding:22px 20px}
+    .quote{padding-left:18px}
+    .tbl td{padding:15px 14px}
+    .final h2{max-width:none}
+    footer{padding:30px 0}
+    footer .wrap{gap:10px}
+    footer .ml-auto{margin-left:0; width:100%}
+    footer a{margin-right:20px; display:inline-block; padding:5px 0}
+  }
+  @media (max-width:420px){
+    .wrap{padding:0 17px}
+    h1{font-size:36px}
+    .cta .btn{flex:1 1 100%}
+    .term pre{font-size:12px}
+  }
 </style>
 </head>
 <body>
@@ -190,24 +256,28 @@
       <a href="#shared">Shared learning</a>
       <a href="#how">How it works</a>
       <a href="#start">Get started</a>
-      <a class="btn primary" href="https://github.com/dhavalw/nerdbrain">GitHub &rarr;</a>
     </div>
+    <a class="btn primary nav-cta" href="https://github.com/dhavalw/nerdbrain">GitHub &rarr;</a>
   </div>
 </nav>
 
 <header>
   <div class="wrap">
-    <span class="eyebrow"><span class="pip"></span> Open source &middot; MIT &middot; works with Claude Code</span>
+    <span class="eyebrow"><span class="pip"></span> A GitHub repo &middot; MIT &middot; works with Claude Code</span>
     <h1>Your AI agent gets better <em>every time you use it.</em></h1>
     <p class="lede">
       You can't write down every preference in advance. nerdbrain doesn't ask you to. It
       watches how you work, writes down what it learned, and asks you to approve it. Say yes
       once, and your agent follows that rule in every project from then on.
     </p>
+    <p class="lede sub">
+      It is a GitHub repository, and that's the whole of it. Nothing to install, no service
+      to depend on, no account to create.
+    </p>
     <div class="cta">
       <a class="btn primary" href="#start">Get started</a>
       <a class="btn" href="https://github.com/dhavalw/nerdbrain">Read the source</a>
-      <span class="note">Attach it to a session. That's the whole setup.</span>
+      <span class="note">Fork it, attach it to your project, work as normal.</span>
     </div>
 
     <div class="term">
@@ -312,7 +382,7 @@
           the original as a pull request. What gets merged there flows down to every
           other fork. A hundred people's agents learning in parallel beats one learning
           alone.
-          <a href="#shared" style="color:var(--acc)">How that works &rarr;</a>
+          <a class="inline-link" href="#shared">How that works &rarr;</a>
         </p>
       </div>
 
@@ -550,7 +620,7 @@
   <div class="wrap">
     <div class="sec-head">
       <div class="kicker">Get started</div>
-      <h2>Attach it next to your project. That's the setup.</h2>
+      <h2>Fork it, attach it, and carry on working.</h2>
       <p>
         Works with <strong>Claude Code</strong> today. It's markdown in a git repo, so in
         principle any agent that can read a repository can use it — but Claude Code is the
@@ -560,35 +630,35 @@
     <div class="flow">
       <div class="step">
         <div class="i">01</div>
-        <h4>Attach it</h4>
-        <p>Add the repo to your session, next to the project you're working on. A second repository on the web; an added directory in the terminal.</p>
+        <h4>Fork it</h4>
+        <p>The brain fills up with your preferences, so start by making it your repository.</p>
       </div>
       <div class="step">
         <div class="i">02</div>
-        <h4>Work as normal</h4>
-        <p>It turns itself on — no command to type. The agent loads what fits the task and follows it.</p>
+        <h4>Attach it to a project</h4>
+        <p>Add your fork to the session, next to the project you're working on. A second repository on the web; an added directory in the terminal.</p>
       </div>
       <div class="step">
         <div class="i">03</div>
-        <h4>Say yes, or don't</h4>
-        <p>It asks to turn what it noticed into a rule. Approve the good ones; ignoring the rest costs nothing.</p>
+        <h4>Work as normal</h4>
+        <p>It turns itself on — no command to type. The agent loads what fits the task and follows it.</p>
       </div>
-      <div class="step">
-        <div class="i">04</div>
-        <h4>Fork it to keep it</h4>
-        <p>The brain fills up with your preferences, so it should be your repository.</p>
+      <div class="step gate">
+        <div class="i">04 · YOUR CALL</div>
+        <h4>Approve what it learned</h4>
+        <p>It asks to turn what it noticed into a rule. Approve the good ones; ignoring the rest costs nothing.</p>
       </div>
       <div class="step share">
         <div class="i">05</div>
-        <h4>Send the general ones home</h4>
-        <p>Rules that would help anyone go back upstream, with your permission, and reach every other fork.</p>
+        <h4>Send the common ones upstream</h4>
+        <p>Every so often, the rules that would help anyone go back to the original — with your permission — and reach every other fork.</p>
       </div>
     </div>
 
     <div class="term" style="max-width:none">
       <div class="bar"><i></i><i></i><i></i></div>
-<pre><span class="c-dim"># the whole thing, if you like it in one place</span>
-<span class="c-dim">$</span> git clone https://github.com/dhavalw/nerdbrain.git ~/.nerdbrain
+<pre><span class="c-dim"># steps 1 and 2, in the terminal</span>
+<span class="c-dim">$</span> git clone https://github.com/&lt;you&gt;/nerdbrain.git ~/.nerdbrain
 <span class="c-dim">$</span> claude <span class="c-key">--add-dir</span> ~/.nerdbrain
 
 <span class="c-dim"># optional: install the skills, and type /nerdbrain on demand</span>

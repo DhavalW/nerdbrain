@@ -369,3 +369,12 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-28)
 - **Target:** `../instructions/copy.md`
 - **Status:** open
+
+### obs-0058 — 2026-08-28
+- **Observation:** Never answer a small viewport by deleting navigation — a bar whose links
+  are hidden under a breakpoint leaves that screen with none at all; make them a
+  horizontally scrollable strip and give up the stickiness instead, because two rows of
+  fixed chrome costs more of a phone than it returns.
+- **Rests on:** seen once (2026-08-28)
+- **Target:** `../instructions/ux-user.md`
+- **Status:** open
