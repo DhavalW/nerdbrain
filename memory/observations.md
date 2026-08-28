@@ -78,9 +78,10 @@ starting state, not a broken one.
 - **Observation:** Assume the reader of an interface is a layman in the subject it
   covers, even when the buyer is technical: plain sentence first, the technical term and
   the raw evidence as subtext underneath it.
-- **Rests on:** stated outright (2026-08-13)
+- **Rests on:** seen 2 times (2026-08-13, 2026-08-28)
 - **Target:** `../instructions/copy.md`
 - **Status:** open
+- **Last raised:** 2026-08-28
 
 ### obs-0016 — 2026-08-14
 - **Observation:** Pushing commits updates a pull request's diff, never its title or
@@ -248,6 +249,7 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-17)
 - **Target:** `../instructions/engineering.md`
 - **Status:** open
+- **Last raised:** 2026-08-28
 
 ### obs-0044 — 2026-08-17
 - **Observation:** Give model-backed work a provider chain rather than one hardcoded
@@ -257,6 +259,7 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-17)
 - **Target:** `../instructions/stack-and-architecture.md`
 - **Status:** open
+- **Last raised:** 2026-08-28
 
 ### obs-0045 — 2026-08-21
 - **Observation:** Load every pack the router matches and never trim the set to hit a
@@ -349,3 +352,29 @@ starting state, not a broken one.
 - **Rests on:** stated outright (2026-08-26)
 - **Target:** `../instructions/engineering.md`
 - **Status:** shipped
+
+### obs-0056 — 2026-08-28
+- **Observation:** Name the environments a thing has actually been tested in and say plainly
+  that the rest are untested — a compatibility claim derived from how something is built
+  reads to a stranger as one derived from a test, and the person it fails for is the one who
+  believed it.
+- **Rests on:** stated outright (2026-08-28)
+- **Target:** `../instructions/copy.md`
+- **Status:** open
+
+### obs-0057 — 2026-08-28
+- **Observation:** Open a setup section with the lowest-effort way to start and demote
+  installation to an alternative below it — a first step that begins with a clone tells the
+  reader the cheap path doesn't exist, whatever a later paragraph says.
+- **Rests on:** stated outright (2026-08-28)
+- **Target:** `../instructions/copy.md`
+- **Status:** open
+
+### obs-0058 — 2026-08-28
+- **Observation:** Never answer a small viewport by deleting navigation — a bar whose links
+  are hidden under a breakpoint leaves that screen with none at all; make them a
+  horizontally scrollable strip and give up the stickiness instead, because two rows of
+  fixed chrome costs more of a phone than it returns.
+- **Rests on:** seen once (2026-08-28)
+- **Target:** `../instructions/ux-user.md`
+- **Status:** open
