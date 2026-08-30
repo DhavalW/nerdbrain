@@ -378,3 +378,12 @@ starting state, not a broken one.
 - **Rests on:** seen once (2026-08-28)
 - **Target:** `../instructions/ux-user.md`
 - **Status:** open
+
+### obs-0059 — 2026-08-30
+- **Observation:** A post about your own project in a community forum carries a real
+  question, its limitations before its features, and a plain statement that it is yours —
+  a pitch wearing a question mark reads as an advertisement to the one audience that
+  punishes it, and the disclosure costs nothing next to being caught without it.
+- **Rests on:** seen once (2026-08-30)
+- **Target:** `../instructions/copy.md`
+- **Status:** open
